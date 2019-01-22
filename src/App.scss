@@ -61,6 +61,7 @@ main {
   flex: 1 0 auto;
 }
 
-.th, .td {
+th, td {
   vertical-align: top !important;
+  margin: 1rem 1rem;
 }

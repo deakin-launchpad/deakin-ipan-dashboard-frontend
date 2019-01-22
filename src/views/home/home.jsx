@@ -27,7 +27,7 @@ class Home extends Component {
     if (!this.state.trackingData) return ''
     return (
       <div className="Home">
-        <table className="striped">
+        <table className="striped highlight responsive-table">
           <thead>
             <tr>
               <th>Index</th>
