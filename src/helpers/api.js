@@ -5,7 +5,7 @@ class API {
 
   // POST requests
 
-  registerUser (data) {
+  registerUser(data) {
     axiosClient.post("user/register", {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -20,6 +20,12 @@ class API {
 
   // GET requests
 
+  getTrackingData(stateHandler) {
+    axiosClient.get("trackingData")
+    .then((response) => {
+      stateHandler({trackingData: response.data.data});
+    })
+  }
 }
 
 const instance = new API();

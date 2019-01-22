@@ -17,7 +17,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'DLP React Boilerplate',
+      title: 'IPAN Dashboard',
     };
   }
 
@@ -69,7 +69,7 @@ class App extends Component {
         </Switch>
 
         {/* Footer */}
-        {this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Footer /> : ''}
+        
       </div>
     );
   }

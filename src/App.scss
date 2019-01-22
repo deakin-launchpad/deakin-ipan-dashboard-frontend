@@ -60,3 +60,7 @@ nav, footer {
 main {
   flex: 1 0 auto;
 }
+
+.th, .td {
+  vertical-align: top !important;
+}
