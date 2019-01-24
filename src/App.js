@@ -17,7 +17,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'IPAN Dashboard',
+      title: 'IPAN',
     };
   }
 

@@ -65,3 +65,75 @@ th, td {
   vertical-align: top !important;
   margin: 1rem 1rem;
 }
+
+html {
+  overflow: hidden;
+}
+
+td:first-child, th:first-child {
+  padding-left: 50px;
+}
+
+.recordList {
+  height: 50vh;
+  top: 0;
+  overflow: scroll;
+  z-index: 0;
+}
+
+.recordView-visible {
+  // opacity: 0.6;
+}
+
+.btn-red {
+  background-color: $complementary-color !important;
+}
+
+.recordView {
+  height: 42vh;
+  bottom: 0;
+  overflow: scroll;
+  z-index: 0;
+  background-color: $complementary-color;
+  color: white;
+  text-align: left;
+  
+  margin: 20px;
+
+  .recordView-header {
+    background-color: white;
+    color: $complementary-color;
+    padding-left: 50px;
+    border-right: 1px solid $complementary-color;
+    border-left: 1px solid $complementary-color;
+    // margin-right: 3px;
+  }
+
+  .divider {
+    background-color: $complementary-color;
+  }
+
+  td:first-child, th:first-child {
+    padding-left: 40px;
+  }
+
+  border-radius: 5px;
+
+  thead {
+    tr:first-child {
+      @media screen and (max-device-width: 992px) {
+        border-right: 1px solid;
+      }
+    }
+  }
+
+  tbody {
+    tr:nth-child(odd) {
+      background-color: maroon;
+    }
+  }
+}
+
+.record-table {
+  // TODO: Make this scrollabe only
+}
