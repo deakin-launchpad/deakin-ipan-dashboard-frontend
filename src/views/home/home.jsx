@@ -89,7 +89,7 @@ class Home extends Component {
                 <th>Session start</th>
                 <th>Session end</th>
                 <th>Session total time</th>
-                <th>Link</th>
+                <th>View</th>
               </tr>
             </thead>
             <tbody>
