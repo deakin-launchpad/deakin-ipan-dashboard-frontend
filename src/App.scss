@@ -117,6 +117,7 @@ td:first-child, th:first-child {
   border-radius: 5px;
 
   thead {
+    color: gainsboro;
     tr:first-child {
       @media screen and (max-device-width: 992px) {
         border-right: 1px solid;
