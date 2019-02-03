@@ -11,7 +11,9 @@ class Home extends Component {
     this.state = {
       trackingData: null,
       clickedRecord: null,
-      clickedRecordIndex: -1
+      clickedRecordIndex: -1,
+      firstLogin: null,
+      lastLogin: null
     }
   }
 
@@ -27,20 +29,95 @@ class Home extends Component {
     API.getTrackingData(this.stateHandler)
   }
 
+  renderUserLastLogin = () => {
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>Last user login time:</td>
+            <td>{moment(this.state.clickedRecord.lastLogin.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
+          </tr>
+          <tr>
+            <td>User ID:</td>
+            <td>{this.state.clickedRecord.lastLogin.id}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  }
+
+  renderUserFirstLogin = () => {
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>First user login time:</td>
+            <td>{moment(this.state.clickedRecord.firstLogin.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
+          </tr>
+          <tr>
+            <td>User ID:</td>
+            <td>{this.state.clickedRecord.firstLogin.id}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  }
+
+  setClickedRecordInfo = () => {
+    var firstLogin, lastLogin, lastLoginIndex, sessionTotalLogins = 0
+    this.state.clickedRecord.data.forEach((item, i) => {
+
+      if ('T_LOGIN' === item.event) {
+        let obj = {
+          time: item.time,
+          id: item.userId
+        }
+
+        if (!firstLogin) {
+          firstLogin = obj
+          lastLogin = obj
+          lastLoginIndex = i
+          sessionTotalLogins += 1
+        }
+
+        else if (lastLoginIndex < i) {
+          lastLogin = obj
+          lastLoginIndex = i
+          sessionTotalLogins += 1
+        }
+      }
+    })
+    let clickedRecord = Object.assign({}, this.state.clickedRecord)
+    clickedRecord.firstLogin = firstLogin
+    clickedRecord.lastLogin = lastLogin
+    clickedRecord.lastLoginIndex = lastLoginIndex
+    clickedRecord.sessionTotalLogins += sessionTotalLogins
+
+    this.setState({ clickedRecord: clickedRecord })
+  }
+
   displayRecord = () => {
     if (!this.state.clickedRecord) return ''
     return (
       <div className="recordView">
         <div className="recordView-header">
-          <h5>History</h5>
-          <div className="divider"></div>
-          Session ID: {this.state.clickedRecord._id}
+          <div className="title">
+            <h5>History</h5>
+            <div className="divider" />
+            Session ID: {this.state.clickedRecord._id}
+            <br />Total users logged in this session: {this.state.clickedRecord.sessionTotalLogins ? this.state.clickedRecord.sessionTotalLogins : 0}
+          </div>
+          <div className="userDetails">
+            {this.state.clickedRecord.sessionTotalLogins >= 1 ? this.renderUserFirstLogin() : ''}
+            {this.state.clickedRecord.sessionTotalLogins > 1 ? this.renderUserLastLogin() : ''}
+          </div>
         </div>
         <div className="record-table">
           <table className="highlight responsive-table">
             <thead>
               <tr>
                 <th>Index</th>
+                <th>UserID</th>
                 <th>URL</th>
                 <th>Event</th>
                 <th>Time</th>
@@ -49,10 +126,11 @@ class Home extends Component {
             </thead>
             <tbody>
               {this.state.clickedRecord.data.map((item, i) => {
-                console.log(item)
                 return (
                   <tr key={'event_' + i}>
+                    {/* {console.log('VALUE OF I again:', i)} */}
                     <td>{i}</td>
+                    {item.userId ? <td className="td-userId"> {item.userId} </td> : <td> </td>}
                     <td>{item.url}</td>
                     <td>{item.event}</td>
                     <td>{moment(item.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
@@ -76,9 +154,6 @@ class Home extends Component {
         {/* <Modal/> */}
         <div
           className={this.state.clickedRecord === null ? 'recordList' : 'recordList recordView-visible'}
-        // onClick={() => {
-        //   if (this.state.clickedRecord !== null) this.setState({clickedRecord: null, clickedRecordIndex: -1})
-        // }}
         >
           <table className="striped highlight responsive-table">
             <thead>
@@ -111,7 +186,9 @@ class Home extends Component {
                         onClick={() => {
                           if (this.state.clickedRecordIndex === i)
                             return this.setState({ clickedRecord: null, clickedRecordIndex: -1 })
-                          this.setState({ clickedRecord: item, clickedRecordIndex: i })
+
+                          item.sessionTotalLogins = 0
+                          this.setState({ clickedRecord: item, clickedRecordIndex: i }, () => { this.setClickedRecordInfo() })
                         }}>
                         {this.state.clickedRecordIndex === i ? 'HIDE' : 'VIEW'}
                       </button>
