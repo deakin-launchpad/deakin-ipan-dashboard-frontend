@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import API from 'helpers/api.js'
-import moment from 'moment'
-// import Modal from 'components/modal.jsx'
-// import M from "materialize-css"
+import moment from 'moment-timezone'
 
-const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"
+const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss z"
+const TIME_ZONE = "Australia/Melbourne"
+
+const momentTz = function (time) {
+  return moment.tz(time, TIME_ZONE).format(TIME_FORMAT)
+}
+
+// console.log('now:', momentTz(new Date().toISOString()))
+
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -35,7 +41,7 @@ class Home extends Component {
         <tbody>
           <tr>
             <td>Last user login time:</td>
-            <td>{moment(this.state.clickedRecord.lastLogin.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
+            <td>{momentTz(this.state.clickedRecord.lastLogin.time)}</td>
           </tr>
           <tr>
             <td>User ID:</td>
@@ -52,7 +58,7 @@ class Home extends Component {
         <tbody>
           <tr>
             <td>First user login time:</td>
-            <td>{moment(this.state.clickedRecord.firstLogin.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
+            <td>{momentTz(this.state.clickedRecord.firstLogin.time)}</td>
           </tr>
           <tr>
             <td>User ID:</td>
@@ -128,12 +134,11 @@ class Home extends Component {
               {this.state.clickedRecord.data.map((item, i) => {
                 return (
                   <tr key={'event_' + i}>
-                    {/* {console.log('VALUE OF I again:', i)} */}
                     <td>{i}</td>
                     {item.userId ? <td className="td-userId"> {item.userId} </td> : <td> </td>}
                     <td>{item.url}</td>
                     <td>{item.event}</td>
-                    <td>{moment(item.time, TIME_FORMAT).format(TIME_FORMAT)}</td>
+                    <td>{momentTz(item.time)}</td>
                     <td>{item.misc.length === 0 ? '' : item.misc.map((misc, i) => {
                       return `${misc.key} = ${misc.value}\n`
                     })}</td>
@@ -177,8 +182,8 @@ class Home extends Component {
                     <td>{i}</td>
                     <td>{item._id}</td>
                     <td>{item.data.length}</td>
-                    <td>{moment(fTime, TIME_FORMAT).format(TIME_FORMAT)}</td>
-                    <td>{moment(lTime, TIME_FORMAT).format(TIME_FORMAT)}</td>
+                    <td>{momentTz(fTime)}</td>
+                    <td>{momentTz(lTime)}</td>
                     <td>{totalTime / 1000}s</td>
                     <td>
                       <button
