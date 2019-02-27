@@ -28,7 +28,8 @@ class Home extends Component {
   }
 
   stateHandler = (state) => {
-    this.setState(state);
+    this.setState(state)
+    this.props.parentStateHandler(state)
   }
 
   getTrackingData = () => {

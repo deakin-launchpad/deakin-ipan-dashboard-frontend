@@ -3,21 +3,21 @@ import './App.scss'
 import 'materialize-css/dist/css/materialize.min.css'
 import 'material-icons/iconfont/material-icons.css'
 import Header from 'components/header.jsx'
-import AppHelper from "helpers/AppHelper.js";
-import Footer from 'components/footer.jsx';
-import LoadingComponent from 'components/loading/loading.jsx';
-import { connect } from 'react-redux';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import { requestAccessTokenLogin } from 'actions';
-import Login from 'views/login/login.jsx';
-import Home from 'views/home/home.jsx';
-import Team from 'views/team/team.jsx';
+import AppHelper from "helpers/AppHelper.js"
+import LoadingComponent from 'components/loading/loading.jsx'
+import { connect } from 'react-redux'
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import { requestAccessTokenLogin } from 'actions'
+import Login from 'views/login/login.jsx'
+import Home from 'views/home/home.jsx'
+import Team from 'views/team/team.jsx'
+import GlobalAnalysis from 'views/global-analysis.jsx'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'IPAN',
+      title: 'Dashboard',
     };
   }
 
@@ -46,20 +46,24 @@ class App extends Component {
       <div className="App">
         {/* Header */}
         {this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Header title={this.state.title} logout={this.stateHandler} /> : ''}
-        
+
         {/* Main body */}
         <Switch>
-          
+
           <Route exact path='/' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} /> )}
+            <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} />)}
           />
 
-          <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? 
-            <Team {...props}/> : <Redirect to='/' /> )} 
+          <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Team {...props} /> : <Redirect to='/' />)}
           />
 
-          <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? 
-            <Home {...props}/> : <Redirect to='/' /> )} 
+          <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+          />
+
+          <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
           />
 
           <Route exact path='/test' render={() => <div>Test</div>} />
@@ -69,7 +73,7 @@ class App extends Component {
         </Switch>
 
         {/* Footer */}
-        
+
       </div>
     );
   }

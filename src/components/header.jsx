@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import AppHelper from "helpers/AppHelper.js";
-import { connect } from 'react-redux';
-import { requestLogout } from 'actions';
+import React, { Component } from 'react'
+import AppHelper from "helpers/AppHelper.js"
+import { connect } from 'react-redux'
+import { requestLogout } from 'actions'
+import { Link } from 'react-router-dom'
 
 class Header extends Component {
   logout = (e) => {
@@ -15,9 +16,12 @@ class Header extends Component {
         <div className="navbar-fixed">
           <nav>
             <div className="nav-wrapper">
-              <a href="#!" className="brand-logo center">{this.props.title}</a>
+              <Link to='/' className="brand-logo center">{this.props.title}</Link>
+              <ul className="left">
+                <li> <Link to={'/analysis/global'}> <i className="large material-icons">insert_chart</i> </Link> </li>
+              </ul>
               <ul className="right">
-              <li> <a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
+                <li> <a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
               </ul>
             </div>
           </nav>
@@ -29,7 +33,7 @@ class Header extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchLogout : () => dispatch(requestLogout())
+    dispatchLogout: () => dispatch(requestLogout())
   }
 }
 
