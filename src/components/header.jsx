@@ -3,6 +3,7 @@ import AppHelper from "helpers/AppHelper.js"
 import { connect } from 'react-redux'
 import { requestLogout } from 'actions'
 import { Link } from 'react-router-dom'
+import SideNavigation from './sideNavigation'
 
 class Header extends Component {
   logout = (e) => {
@@ -13,19 +14,27 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <div className="navbar-fixed">
-          <nav>
-            <div className="nav-wrapper">
-              <Link to='/' className="brand-logo center">{this.props.title}</Link>
-              <ul className="left">
-                <li> <Link to={'/analysis/global'}> <i className="large material-icons">insert_chart</i> </Link> </li>
-              </ul>
-              <ul className="right">
-                <li> <a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
-              </ul>
-            </div>
-          </nav>
-        </div>
+        <nav className="top-nav">
+          <div className="nav-wrapper">
+            <Link to='/' className="brand-logo center">{this.props.title}</Link>
+            <ul className="left">
+              <li>
+                <a href="#!" data-target="nav-mobile" class="top-nav sidenav-trigger full hide-on-large-only">
+                  <i class="material-icons">menu</i>
+                </a>
+              </li>
+              <li>
+                <Link to={'/analysis/global'}> <i className="large material-icons">insert_chart</i></Link>
+              </li>
+            </ul>
+            <ul className="right">
+              <li> <a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <SideNavigation />
+
       </header>
     );
   }
