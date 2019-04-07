@@ -1,0 +1,30 @@
+// Tint #0C8573,#2E9687,#51A79B,#74B9AF,#96CAC3,#B9DCD7,#DCEDEB
+$primary:#0c8573;
+$secondary:white;
+$tertiary:#c74298;
+$lightgrey: #F5F5F5;
+
+$palettes: (
+  green : (
+    lightest: #DCEDEB,
+    lighter:  #B9DCD7,
+    light:    #96CAC3,
+    base:     #74B9AF,
+    dark:     #51A79B,
+    darker:   #2E9687,
+    darkest:  #0C8573
+  )
+);
+
+// function to get color from palatte
+@function get-color($color, $tint) {
+  @return map-get(map-get($palettes, $color), $tint);
+}
+
+// Font weight
+$font-weight-lightest:  100;
+$font-weight-light:     200;
+$font-weight-normal:    400;
+$font-weight-bold:      500;
+$font-weight-bolder:    800;
+$font-weight-boldest:   900;
