@@ -48,29 +48,31 @@ class App extends Component {
         {this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Header title={this.state.title} logout={this.stateHandler} /> : ''}
 
         {/* Main body */}
-        <Switch>
+        <main>
+          <Switch>
 
-          <Route exact path='/' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} />)}
-          />
+            <Route exact path='/' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} />)}
+            />
 
-          <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <Team {...props} /> : <Redirect to='/' />)}
-          />
+            <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Team {...props} /> : <Redirect to='/' />)}
+            />
 
-          <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
-          />
+            <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
 
-          <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
-          />
+            <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
+            />
 
-          <Route exact path='/test' render={() => <div>Test</div>} />
+            <Route exact path='/test' render={() => <div>Test</div>} />
 
-          <Route render={() => <div>404 Error</div>} />
+            <Route render={() => <div>404 Error</div>} />
 
-        </Switch>
+          </Switch>
+        </main>
 
         {/* Footer */}
 
