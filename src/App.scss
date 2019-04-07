@@ -1,3 +1,15 @@
+@import './variables';
+
+header, main, footer {
+  padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
+}
+
 // SASS style guide
 // color
 $primary-color: #0C8573;
