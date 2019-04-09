@@ -64,7 +64,11 @@ class App extends Component {
               <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
-            <Route exact path='/programs' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Route exact path='/content' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Redirect to='/content/programs' /> : <Redirect to='/' />)}
+            />
+
+            <Route exact path='/content/programs' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Programs {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 

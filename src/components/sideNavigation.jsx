@@ -11,21 +11,10 @@ class NavMobile extends Component {
   render() {
     return (
       <ul id="nav-mobile" className="sidenav sidenav-fixed">
-        <li className="no-padding">
-          <ul className="collapsible collapsible-accordion">
-            <li>
-              <a className="collapsible-header">Dropdown<i className="material-icons">arrow_drop_down</i></a>
-              <div className="collapsible-body">
-                <ul>
-                  <li>
-                    <Link to={{ pathname: CONSTANTS.PROGRAMS }}>
-                    Programs
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
+        <li>
+          <Link to={{ pathname: CONSTANTS.CONTENT }}>
+          Manage Content
+          </Link>
         </li>
         <li>
           <Link to={{ pathname: CONSTANTS.TRACKING }}>
