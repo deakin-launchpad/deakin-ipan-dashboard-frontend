@@ -26,6 +26,13 @@ class API {
       stateHandler({trackingData: response.data.data});
     })
   }
+
+  getPrograms(stateHandler) {
+    axiosClient.get("programs")
+    .then((response) => {
+      stateHandler({programs: response.data.data.programs});
+    })
+  }
 }
 
 const instance = new API();
