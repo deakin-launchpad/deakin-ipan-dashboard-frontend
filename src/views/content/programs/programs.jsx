@@ -27,18 +27,21 @@ class Programs extends Component {
   render() {
     if (!this.state.programs) return ''
     return (
-      <div className="Programs">
+      <div className="container">
         <h1>
           Programs
         </h1>
-        <div className="collection">
-          {
-            this.state.programs.map((program) => {
-              return (
-                <a key={program.id} href="#!" className="collection-item">{program.title}</a>
-              );
-            })
-          }
+        <div className="divider" />
+        <div className="row">
+          <div className="col s3 collection">
+            {
+              this.state.programs.map((program) => {
+                return (
+                  <a key={program.id} href="#!" className="collection-item">{program.title}</a>
+                );
+              })
+            }
+          </div>
         </div>
       </div>
     );
