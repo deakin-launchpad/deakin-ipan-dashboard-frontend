@@ -11,7 +11,9 @@ import { requestAccessTokenLogin } from 'actions'
 import Login from 'views/login/login.jsx'
 import Home from 'views/home/home.jsx'
 import Team from 'views/team/team.jsx'
+import ManageTask from 'views/content/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
+import { CONSTANTS } from './helpers/urlConstants';
 
 class App extends Component {
   constructor(props) {
@@ -52,19 +54,23 @@ class App extends Component {
           <Switch>
 
             <Route exact path='/' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-              <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} />)}
+              <Redirect to={CONSTANTS.HOME} /> : <Login parentState={this.state} parentProps={this.props} />)}
             />
 
             <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Team {...props} /> : <Redirect to='/' />)}
             />
 
-            <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Route exact path={CONSTANTS.HOME} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
             <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
+            />
+
+            <Route exact path={CONSTANTS.TASKS} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <ManageTask {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
             <Route exact path='/test' render={() => <div>Test</div>} />
