@@ -1,5 +1,6 @@
 import AppHelper from "helpers/AppHelper.js";
 import { axiosClient } from 'index.js';
+import { CONSTANTS } from "./urlConstants";
 
 class API {
 
@@ -12,19 +13,29 @@ class API {
       emailId: data.emailId,
       password: data.password,
     })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => console.log(error));
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
   }
 
   // GET requests
 
   getTrackingData(stateHandler) {
     axiosClient.get("trackingData")
-    .then((response) => {
-      stateHandler({trackingData: response.data.data});
-    })
+      .then((response) => {
+        stateHandler({ trackingData: response.data.data });
+      })
+  }
+
+  getTasksData(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
+      .then((response) => {
+        stateHandler({
+          apiResponse: true,
+          tasksData: response.data.data.tasks
+        })
+      })
   }
 }
 
