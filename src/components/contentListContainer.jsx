@@ -1,7 +1,6 @@
 import React from 'react'
 
 export const ContentListContainer = (props) => {
-  console.log(props.selectedTaskId)
   return (
     <div className="content-list">
       <div class="row">
