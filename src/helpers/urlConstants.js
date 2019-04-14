@@ -1,7 +1,13 @@
 export const CONSTANTS = {
   TRACKING:           "/tracking",
   HOME:               "/home",
+  STATISTICS:         "/statistics",
+
   CONTENT:            "/content",
   PROGRAMS:           "/programs",
-  STATISTICS:         "/statistics"
+  TASKS:              "/content/programs/modules/tasks",
+
+
+  // SWAGGER API
+  ASSET_MANAGEMENT_TASKS: "/assetmanagment/tasks"
 }

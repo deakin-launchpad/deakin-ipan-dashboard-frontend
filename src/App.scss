@@ -175,3 +175,23 @@ td:first-child, th:first-child {
 .record-table {
   // TODO: Make this scrollabe only
 }
+
+
+.custom-card-padding {
+  padding: 0.5rem 0px !important;
+}
+
+.custom-container-padding {
+  padding: 0 10.875px;
+}
+
+// MANGE CONTENT TASK
+.ManageTasks {
+  @extend .custom-container-padding;
+  .card-action {
+    @extend .custom-card-padding;
+    .material-icons {
+      font-size: 1rem !important;
+    }
+  }
+}
