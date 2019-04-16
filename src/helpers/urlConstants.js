@@ -4,6 +4,7 @@ export const CONSTANTS = {
   STATISTICS:         "/statistics",
 
   CONTENT:            "/content",
+  PROGRAMS:           "/programs",
   TASKS:              "/content/programs/modules/tasks",
 
 

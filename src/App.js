@@ -10,6 +10,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { requestAccessTokenLogin } from 'actions'
 import Login from 'views/login/login.jsx'
 import Home from 'views/home/home.jsx'
+import Programs from 'views/content/programs/programs.jsx'
 import Team from 'views/team/team.jsx'
 import ManageTask from 'views/content/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
@@ -63,6 +64,14 @@ class App extends Component {
 
             <Route exact path={CONSTANTS.HOME} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
+
+            <Route exact path='/content' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Redirect to='/content/programs' /> : <Redirect to='/' />)}
+            />
+
+            <Route exact path='/content/programs' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Programs {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
             <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?

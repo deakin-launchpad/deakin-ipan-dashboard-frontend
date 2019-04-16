@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom'
 import SideNavigation from './sideNavigation'
 
 class Header extends Component {
+
   logout = (e) => {
     e.preventDefault();
     this.props.dispatchLogout()
     AppHelper.logoutUser()
   }
+
   render() {
     return (
       <header>
@@ -19,8 +21,8 @@ class Header extends Component {
             <Link to='/' className="brand-logo center">{this.props.title}</Link>
             <ul className="left">
               <li>
-                <a href="#!" data-target="nav-mobile" class="top-nav sidenav-trigger full hide-on-large-only">
-                  <i class="material-icons">menu</i>
+                <a href="#!" data-target="nav-mobile" className="top-nav sidenav-trigger full hide-on-large-only">
+                  <i className="material-icons">menu</i>
                 </a>
               </li>
               <li>
@@ -28,7 +30,7 @@ class Header extends Component {
               </li>
             </ul>
             <ul className="right">
-              <li> <a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
+              <li><a onClick={this.logout} className="waves-effect waves-light btn" href="#!">Logout</a></li>
             </ul>
           </div>
         </nav>
