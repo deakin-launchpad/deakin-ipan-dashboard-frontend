@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import LoadingComponent from '../../components/loading/loading'
 import { ContentListContainer } from '../../components/contentListContainer'
 import API from '../../helpers/api'
+import M from "materialize-css"
+
+const ANSWER_TYPES = ["ANSWER_BOTH", "ANSWER_POPUP", "ANSWER_SUMMARY"]
+const QUESTION_TYPES = ["ONE_CHOICE"]
 
 class ManageTask extends Component {
   constructor(props) {
@@ -10,7 +14,8 @@ class ManageTask extends Component {
     this.state = {
       tasksData: null,
       apiResponse: false,
-      selectedTaskId: 0,
+      selectedTaskId: null,
+      editFlag: false,
     };
   }
 
@@ -21,6 +26,7 @@ class ManageTask extends Component {
   }
 
   componentDidMount() {
+    M.AutoInit()
     this.getTasksData()
   }
 
@@ -32,8 +38,12 @@ class ManageTask extends Component {
     this.setState({ selectedTaskId: selectedTaskId })
   }
 
+  filterArrayByID = (data, arrayId) => {
+    return data.find(item => item.id === arrayId)
+  }
+
   render() {
-    if (!this.state.apiResponse) return (<LoadingComponent />);
+    if (!this.state.apiResponse) return (<LoadingComponent />)
     return(
       <div className="ManageTasks">
 
@@ -43,8 +53,80 @@ class ManageTask extends Component {
           </h4>
         </div>
 
-        <ContentListContainer title={'Tasks'} data={this.state.tasksData} onClickAction={this.onClickAction} selectedTaskId={this.state.selectedTaskId} />
         
+        
+        <div className="row">
+          <div className="col s4 m4 l4">
+          <ContentListContainer title={'Tasks'} data={this.state.tasksData} onClickAction={this.onClickAction} selectedTaskId={this.state.selectedTaskId} />
+          </div>
+          
+          <div className="col s8 m8 l8">
+            <div className="card">
+              <div className="card-content">
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Task ID </p>
+                  <div className="input-field col s10">
+                    <input id="task-id" type="number" defaultValue={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).id) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Task Title </p>
+                  <div className="input-field col s10">
+                    <input id="task-title" type="text" defaultValue={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).title) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Answer Type </p>
+                  <div className="col s10 m10 l10 answer-type">
+                    <select class="browser-default" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
+                      <option value="">Choose your option</option>
+                      {
+                        ANSWER_TYPES.map((item, key) => {
+                          return <option value={item} key={key}>{item}</option>
+                        })
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Question Type </p>
+                  <div className="col s10 m10 l10 question-type">
+                    <select class="browser-default" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
+                      <option value="">Choose your option</option>
+                      {
+                        QUESTION_TYPES.map((item, key) => {
+                          return <option value={item} key={key}>{item}</option>
+                        })
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Short Description </p>
+                  <div className="col s10 m10 l10">
+                    <textarea id="short-description" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.taskSummary) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Task Summary </p>
+                  <div className="col s10 m10 l10">
+                    <textarea id="task-summary" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).shortDescription) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+                
+                {/* TODO: Display Question Set */}
+
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     )
   }
