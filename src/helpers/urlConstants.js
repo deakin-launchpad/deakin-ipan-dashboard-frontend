@@ -7,6 +7,7 @@ export const CONSTANTS = {
   TASKS:              "/content/programs/modules/tasks",
   PROGRAM:            "/programs/?",
   MODULES:            "/programs/?/modules",
+  MODULE:             "/programs/?/modules/?",
 
 
   // SWAGGER API

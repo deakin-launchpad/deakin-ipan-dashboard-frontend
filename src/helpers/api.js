@@ -1,6 +1,7 @@
 import AppHelper from "helpers/AppHelper.js";
 import { axiosClient } from 'index.js';
 import { CONSTANTS } from "./urlConstants";
+import { replacePlaceHolder } from 'helpers/urlHelper.js';
 
 class API {
 
@@ -28,6 +29,22 @@ class API {
       })
   }
 
+  getProgram = (stateHandler, p_id) => {
+    axiosClient.get(replacePlaceHolder(CONSTANTS.PROGRAM, [p_id]))
+      .then((response) => {
+        stateHandler({ program: response.data.data.programs })
+      })
+  }
+
+  getModule(stateHandler, p_id, m_id) {
+    axiosClient.get(replacePlaceHolder(CONSTANTS.MODULE, [p_id, m_id]))
+      .then((response)=> {
+        stateHandler({
+          module: response.data.data.module,
+        })
+      })
+  }
+
   getTasksData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
       .then((response) => {
@@ -37,6 +54,7 @@ class API {
         })
       })
   }
+  
 }
 
 const instance = new API();
