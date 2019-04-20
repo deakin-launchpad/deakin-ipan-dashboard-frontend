@@ -12,7 +12,7 @@ import Login from 'views/login/login.jsx'
 import Home from 'views/home/home.jsx'
 import Programs from 'views/content/programs/programs.jsx'
 import Team from 'views/team/team.jsx'
-import ManageTask from 'views/content/tasks'
+import ManageTask from 'views/content/tasks/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
 import { CONSTANTS } from './helpers/urlConstants';
 
