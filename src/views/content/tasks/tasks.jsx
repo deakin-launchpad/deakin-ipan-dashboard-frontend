@@ -76,7 +76,7 @@ class ManageTask extends Component {
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Answer Type </p>
                   <div className="col s10 m10 l10 answer-type">
-                    <select className="browser-default" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
+                    <select className="browser-default" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
                       <option value="">Choose your option</option>
                       {
                         ANSWER_TYPES.map((item, key) => {
@@ -90,7 +90,7 @@ class ManageTask extends Component {
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Question Type </p>
                   <div className="col s10 m10 l10 question-type">
-                    <select className="browser-default" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
+                    <select className="browser-default" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
                       <option value="">Choose your option</option>
                       {
                         QUESTION_TYPES.map((item, key) => {
