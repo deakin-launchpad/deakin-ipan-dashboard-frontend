@@ -3,11 +3,11 @@ import React from 'react'
 export const ContentListContainer = (props) => {
   return (
     <div className="content-list">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title left-align">{props.title}</span>
+      <div className="card">
+        <div className="card-content">
+          <span className="card-title left-align">{props.title}</span>
 
-          <div class="card-action">
+          <div className="card-action">
             {
               props.data.length > 0 ? (
                 props.data.map(item => {
