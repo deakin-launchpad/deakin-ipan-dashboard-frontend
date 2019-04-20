@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
-import LoadingComponent from '../../components/loading/loading'
-import { ContentListContainer } from '../../components/contentListContainer'
-import API from '../../helpers/api'
+import LoadingComponent from '../../../components/loading/loading'
+import { ContentListContainer } from '../../../components/contentListContainer'
+import API from '../../../helpers/api'
 import M from "materialize-css"
 
 const ANSWER_TYPES = ["ANSWER_BOTH", "ANSWER_POPUP", "ANSWER_SUMMARY"]
@@ -15,6 +15,7 @@ class ManageTask extends Component {
       tasksData: null,
       apiResponse: false,
       selectedTaskId: null,
+      selectedTaskData: null,
       editFlag: false,
     };
   }
@@ -34,12 +35,8 @@ class ManageTask extends Component {
     API.getTasksData(this.stateHandler);
   }
 
-  onClickAction = (selectedTaskId) => {
-    this.setState({ selectedTaskId: selectedTaskId })
-  }
-
-  filterArrayByID = (data, arrayId) => {
-    return data.find(item => item.id === arrayId)
+  onClickAction = (selectedTaskId, selectedTaskData) => {
+    this.setState({ selectedTaskId: selectedTaskId, selectedTaskData: selectedTaskData })
   }
 
   render() {
@@ -53,8 +50,6 @@ class ManageTask extends Component {
           </h4>
         </div>
 
-        
-        
         <div className="row">
           <div className="col s4 m4 l4">
           <ContentListContainer title={'Tasks'} data={this.state.tasksData} onClickAction={this.onClickAction} selectedTaskId={this.state.selectedTaskId} />
@@ -67,21 +62,21 @@ class ManageTask extends Component {
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Task ID </p>
                   <div className="input-field col s10">
-                    <input id="task-id" type="number" defaultValue={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).id) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    <input id="task-id" type="number" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.id) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
                   </div>
                 </div>
 
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Task Title </p>
                   <div className="input-field col s10">
-                    <input id="task-title" type="text" defaultValue={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).title) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    <input id="task-title" type="text" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.title) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
                   </div>
                 </div>
 
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Answer Type </p>
                   <div className="col s10 m10 l10 answer-type">
-                    <select class="browser-default" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
+                    <select class="browser-default" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
                       <option value="">Choose your option</option>
                       {
                         ANSWER_TYPES.map((item, key) => {
@@ -95,7 +90,7 @@ class ManageTask extends Component {
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Question Type </p>
                   <div className="col s10 m10 l10 question-type">
-                    <select class="browser-default" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
+                    <select class="browser-default" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
                       <option value="">Choose your option</option>
                       {
                         QUESTION_TYPES.map((item, key) => {
@@ -109,14 +104,14 @@ class ManageTask extends Component {
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Short Description </p>
                   <div className="col s10 m10 l10">
-                    <textarea id="short-description" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).data.taskSummary) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    <textarea id="short-description" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.taskSummary) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
                   </div>
                 </div>
 
                 <div className="row">
                   <p className="col s2 m2 l2 left-align"> Task Summary </p>
                   <div className="col s10 m10 l10">
-                    <textarea id="task-summary" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? ((this.filterArrayByID(this.state.tasksData, this.state.selectedTaskId)).shortDescription) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    <textarea id="task-summary" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.shortDescription) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
                   </div>
                 </div>
                 
