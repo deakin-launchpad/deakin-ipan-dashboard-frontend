@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import LoadingComponent from '../../../components/loading/loading'
+import { ContentListContainer } from '../../../components/contentListContainer'
 import API from 'helpers/api.js'
 import M from "materialize-css"
 
@@ -6,13 +8,16 @@ class Programs extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      apiResponse: false,
       programs: [],
-      selectedProgram: null
+      selectedProgram: null,
+      selectedProgramId: null,
+      editFlag: false
     };
   }
 
   componentDidMount() {
-    // M.AutoInit();
+    M.AutoInit();
     this.getPrograms();
   }
 
@@ -25,63 +30,57 @@ class Programs extends Component {
     API.getPrograms(this.stateHandler);
   }
 
-  selectProgram = (program, e) => {
-    this.setState({selectedProgram: program}, () => M.textareaAutoResize(document.querySelector('.materialize-textarea')));
+  onClickAction = (selectedProgramId, selectedProgram) => {
+    this.setState({ selectedProgramId: selectedProgramId, selectedProgram: selectedProgram }, () => M.textareaAutoResize(document.querySelector('.materialize-textarea')))
   }
 
   render() {
-    return (
-      <div className="container">
-        <h1>
-          Programs
-        </h1>
+    if (!this.state.apiResponse) return (<LoadingComponent />)
+    return(
+      <div className="ManagePrograms">
+        <div className="title left-align">
+          <h4>
+            Programs
+          </h4>
+        </div>
 
-        <div className="divider" />
+        <div className="row">
+          <div className="col s4 m4 l4">
+            <ContentListContainer title={'Programs'} data={this.state.programs} onClickAction={this.onClickAction} selectedTaskId={this.state.selectedProgramId} />
+          </div>
+          
+          <div className="col s8 m8 l8">
+            <div className="card">
+              <div className="card-content">
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Program ID </p>
 
-        {
-          !this.state.programs ? "" :
-            <div className="row">
-              <div className="col s12 m3 collection">
-                {
-                  this.state.programs.map((program) => {
-                    return (
-                      <a key={program.id} href="#!" className={this.state.selectedProgram && program.id === this.state.selectedProgram.id ? "collection-item active" : "collection-item"} onClick={this.selectProgram.bind(this, program)}>{program.title}</a>
-                    );
-                  })
-                }
-              </div>
-              
-              {
-                !this.state.selectedProgram ? "" :
-                  <div className="col s12 m9 row">
-                    <form className="col s12">
-                      <div className="row">
-                        <div className="input-field col s12">
-                          <input disabled value={this.state.selectedProgram.title} id="title" type="text" className="validate" />
-                          <label htmlFor="title" className="active">Title</label>
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        <div className="input-field col s12">
-                          <textarea disabled value={this.state.selectedProgram.description} id="description" type="text" className="validate materialize-textarea" />
-                          <label htmlFor="description" className="active">Description</label>
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        <div className="input-field col s12">
-                          <input disabled value={this.state.selectedProgram.coverPhoto} id="coverPhoto" type="text" className="validate" />
-                          <label htmlFor="coverPhoto" className="active">Cover Photo</label>
-                        </div>
-                      </div>
-                    </form>
+                  <div className="input-field col s10">
+                    <input id="program-id" type="number" defaultValue={this.state.selectedProgramId !== null ? (this.state.selectedProgram.id) : null} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false} />
                   </div>
-              }
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Program Title </p>
+
+                  <div className="input-field col s10">
+                    <input id="program-title" type="text" defaultValue={this.state.selectedProgramId !== null ? (this.state.selectedProgram.title) : null} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <p className="col s2 m2 l2 left-align"> Description </p>
+
+                  <div className="col s10 m10 l10">
+                    <textarea id="program-description" type="text" className="materialize-textarea validate" value={this.state.selectedProgramId !== null ? (this.state.selectedProgram.description) : undefined} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false} />
+                  </div>
+                </div>
+              </div>
             </div>
-      }
+          </div>
+        </div>
       </div>
-    );
+    )
   }
 }
 

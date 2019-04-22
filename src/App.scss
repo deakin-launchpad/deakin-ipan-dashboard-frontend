@@ -186,7 +186,7 @@ td:first-child, th:first-child {
 }
 
 // MANGE CONTENT TASK
-.ManageTasks {
+.ManageTasks, .ManagePrograms {
   @extend .custom-container-padding;
   .card-action {
     @extend .custom-card-padding;
