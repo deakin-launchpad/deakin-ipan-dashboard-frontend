@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import LoadingComponent from '../../../components/loading/loading'
 import { ContentListContainer } from '../../../components/contentListContainer'
 import API from 'helpers/api.js'
@@ -79,6 +80,14 @@ class Programs extends Component {
             </div>
           </div>
         </div>
+
+        <Link
+          to={{
+            pathname: "/content/programs/" + this.state.selectedProgramId + "/modules",
+            state: {selectedProgram: this.state.selectedProgram}
+          }}>
+          Modules
+        </Link>
       </div>
     )
   }
