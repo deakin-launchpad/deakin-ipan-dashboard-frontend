@@ -41,7 +41,6 @@ class ManageTask extends Component {
   }
 
   renderQuestionSet = (data) => {
-    console.log(data.popup)
     return (
       <div key={data.id}>
 
