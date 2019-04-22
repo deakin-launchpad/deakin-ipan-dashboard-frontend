@@ -52,6 +52,7 @@ class ManageTask extends Component {
             type="number"
             className="validate"
             defaultValue={data.id}
+            disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
           />
           <label className="active" htmlFor="question-id">Question ID</label>
         </div>
@@ -70,6 +71,7 @@ class ManageTask extends Component {
                       type="text"
                       className="materialize-textarea validate"
                       defaultValue={data.question.text ? data.question.text : data.question.image}
+                      disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
                     />
                     <label className="active" htmlFor="question">Question</label>
                   </div>
@@ -78,7 +80,9 @@ class ManageTask extends Component {
                   <select
                     className="browser-default"
                     value={data.question.text ? "TEXT" : "IMAGE"}
-                    onChange={(e) => console.log(e.target.value)}>
+                    onChange={(e) => console.log(e.target.value)}
+                    disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                  >
                     <option value="">Choose your option</option>
                     {
                       QUESTION.map((item, key) => {
@@ -102,8 +106,9 @@ class ManageTask extends Component {
                         type="text"
                         className="materialize-textarea validate"
                         defaultValue={item.text ? item.text : item.image}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
                       />
-                      <label className="active" htmlFor={"option_" + i}>Option {i+1}</label>
+                      <label className="active" htmlFor={"option_" + i}>Option {i + 1}</label>
                     </div>
                   )
                 })
@@ -122,6 +127,7 @@ class ManageTask extends Component {
                         type="text"
                         className="materialize-textarea validate"
                         defaultValue={item}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
                       />
                       <label className="active" htmlFor={"popup_" + i}>Popup {i + 1}</label>
                     </div>
@@ -139,6 +145,7 @@ class ManageTask extends Component {
                   type="number"
                   className="validate"
                   defaultValue={data.correct}
+                  disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
                 />
                 <label className="active" htmlFor="correct">Correct</label>
               </div>
@@ -206,7 +213,9 @@ class ManageTask extends Component {
                       <select
                         className="browser-default"
                         value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false}
-                        onChange={(e) => console.log(e.target.value)}>
+                        onChange={(e) => console.log(e.target.value)}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                      >
                         <option value="">Choose your option</option>
                         {
                           ANSWER_TYPES.map((item, key) => {
@@ -223,7 +232,9 @@ class ManageTask extends Component {
                       <select
                         className="browser-default"
                         value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false}
-                        onChange={(e) => console.log(e.target.value)}>
+                        onChange={(e) => console.log(e.target.value)}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                      >
                         <option value="">Choose your option</option>
                         {
                           QUESTION_TYPES.map((item, key) => {
