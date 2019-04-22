@@ -163,9 +163,16 @@ class ManageTask extends Component {
     return (
       <div className="ManageTasks">
         <div className="title left-align">
-          <h4>
-            Tasks
-          </h4>
+          <div className="row valign-wrapper">
+            <div className="col s11 m11 l11">
+              <h4>
+                Tasks
+              </h4>
+            </div>
+            <div className="col s1 m1 l1 right-align">
+              <i className="material-icons" onClick={() => (this.state.selectedTaskId ? (this.setState({ editFlag: !this.state.editFlag})) : null )}>edit</i>
+            </div>
+          </div>
         </div>
 
         <div className="content-area">
