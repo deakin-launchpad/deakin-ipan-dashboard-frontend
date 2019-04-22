@@ -41,87 +41,117 @@ class ManageTask extends Component {
 
   render() {
     if (!this.state.apiResponse) return (<LoadingComponent />)
-    return(
+    return (
       <div className="ManageTasks">
-
         <div className="title left-align">
           <h4>
             Tasks
           </h4>
         </div>
 
-        <div className="row">
-          <div className="col s4 m4 l4">
-          <ContentListContainer title={'Tasks'} data={this.state.tasksData} onClickAction={this.onClickAction} selectedTaskId={this.state.selectedTaskId} />
-          </div>
-          
-          <div className="col s8 m8 l8">
-            <div className="card">
-              <div className="card-content">
+        <div className="content-area">
+          <div className="row">
+            <div className="col s4 m4 l4">
+              <ContentListContainer
+                title={'Tasks'}
+                data={this.state.tasksData}
+                onClickAction={this.onClickAction}
+                selectedTaskId={this.state.selectedTaskId}
+              />
+            </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Task ID </p>
-                  <div className="input-field col s10">
-                    <input id="task-id" type="number" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.id) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+            <div className="col s8 m8 l8">
+              <div className="card">
+                <div className="card-content">
+
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Task ID </p>
+                    <div className="input-field col s10 m10 l10">
+                      <input
+                        id="task-id"
+                        type="number"
+                        defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.id) : null}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Task Title </p>
-                  <div className="input-field col s10">
-                    <input id="task-title" type="text" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.title) : null} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Task Title </p>
+                    <div className="input-field col s10 m10 l10">
+                      <input
+                        id="task-title"
+                        type="text" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.title) : null}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Answer Type </p>
-                  <div className="col s10 m10 l10 answer-type">
-                    <select className="browser-default" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false} onChange={(e) => console.log(e.target.value)}>
-                      <option value="">Choose your option</option>
-                      {
-                        ANSWER_TYPES.map((item, key) => {
-                          return <option value={item} key={key}>{item}</option>
-                        })
-                      }
-                    </select>
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Answer Type </p>
+                    <div className="input-field col s10 m10 l10 answer-type">
+                      <select
+                        className="browser-default"
+                        value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.answerType) : false}
+                        onChange={(e) => console.log(e.target.value)}>
+                        <option value="">Choose your option</option>
+                        {
+                          ANSWER_TYPES.map((item, key) => {
+                            return <option value={item} key={key}>{item}</option>
+                          })
+                        }
+                      </select>
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Question Type </p>
-                  <div className="col s10 m10 l10 question-type">
-                    <select className="browser-default" defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false} onChange={(e) => console.log(e.target.value)}>
-                      <option value="">Choose your option</option>
-                      {
-                        QUESTION_TYPES.map((item, key) => {
-                          return <option value={item} key={key}>{item}</option>
-                        })
-                      }
-                    </select>
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Question Type </p>
+                    <div className="input-field col s10 m10 l10 question-type">
+                      <select
+                        className="browser-default"
+                        value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.questionType) : false}
+                        onChange={(e) => console.log(e.target.value)}>
+                        <option value="">Choose your option</option>
+                        {
+                          QUESTION_TYPES.map((item, key) => {
+                            return <option value={item} key={key}>{item}</option>
+                          })
+                        }
+                      </select>
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Short Description </p>
-                  <div className="col s10 m10 l10">
-                    <textarea id="short-description" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.taskSummary) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Short Description </p>
+                    <div className="col s10 m10 l10">
+                      <textarea
+                        id="short-description" type="text"
+                        className="materialize-textarea validate"
+                        value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.data.taskSummary) : undefined}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Task Summary </p>
-                  <div className="col s10 m10 l10">
-                    <textarea id="task-summary" type="text" className="materialize-textarea validate" value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.shortDescription) : undefined} disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Task Summary </p>
+                    <div className="col s10 m10 l10">
+                      <textarea
+                        id="task-summary"
+                        type="text"
+                        className="materialize-textarea validate"
+                        value={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.shortDescription) : undefined}
+                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false} />
+                    </div>
                   </div>
-                </div>
-                
-                {/* TODO: Display Question Set */}
 
+                  {/* TODO: Display Question Set */}
+
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     )
   }
