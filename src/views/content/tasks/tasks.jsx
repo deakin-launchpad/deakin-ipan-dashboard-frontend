@@ -7,6 +7,7 @@ import M from "materialize-css"
 
 const ANSWER_TYPES = ["ANSWER_BOTH", "ANSWER_POPUP", "ANSWER_SUMMARY"]
 const QUESTION_TYPES = ["ONE_CHOICE"]
+const QUESTION = ["TEXT", "IMAGE"]
 
 class ManageTask extends Component {
   constructor(props) {
@@ -37,6 +38,118 @@ class ManageTask extends Component {
 
   onClickAction = (selectedTaskId, selectedTaskData) => {
     this.setState({ selectedTaskId: selectedTaskId, selectedTaskData: selectedTaskData })
+  }
+
+  renderQuestionSet = (data) => {
+    console.log(data.popup)
+    return (
+      <div key={data.id}>
+
+        {/* Task ID */}
+        <div className="input-field">
+          <input
+            id="question-id"
+            type="number"
+            className="validate"
+            defaultValue={data.id}
+          />
+          <label className="active" htmlFor="question-id">Question ID</label>
+        </div>
+        {/* End */}
+
+        <div className="row">
+          <div className="offset-l1 offset-m1 col s11 m11 l11">
+
+            {/* Question */}
+            <div className="question">
+              <div className="row">
+                <div className="col s8 m8 l8">
+                  <div className="input-field">
+                    <textarea
+                      id="question"
+                      type="text"
+                      className="materialize-textarea validate"
+                      defaultValue={data.question.text ? data.question.text : data.question.image}
+                    />
+                    <label className="active" htmlFor="question">Question</label>
+                  </div>
+                </div>
+                <div className="col s4 m4 l4">
+                  <select
+                    className="browser-default"
+                    value={data.question.text ? "TEXT" : "IMAGE"}
+                    onChange={(e) => console.log(e.target.value)}>
+                    <option value="">Choose your option</option>
+                    {
+                      QUESTION.map((item, key) => {
+                        return <option value={item} key={key}>{item}</option>
+                      })
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+            {/* End */}
+
+            {/* Options Array */}
+            <div className="options-array">
+              {
+                data.options.map((item, i) => {
+                  return (
+                    <div className="input-field" key={i}>
+                      <textarea
+                        id={"option_" + i}
+                        type="text"
+                        className="materialize-textarea validate"
+                        defaultValue={item.text ? item.text : item.image}
+                      />
+                      <label className="active" htmlFor={"option_" + i}>Option {i+1}</label>
+                    </div>
+                  )
+                })
+              }
+            </div>
+            {/* End */}
+
+            {/* Popup array */}
+            <div className="options-array">
+              {
+                data.popup.map((item, i) => {
+                  return (
+                    <div className="input-field" key={i}>
+                      <textarea
+                        id={"popup_" + i}
+                        type="text"
+                        className="materialize-textarea validate"
+                        defaultValue={item}
+                      />
+                      <label className="active" htmlFor={"popup_" + i}>Popup {i + 1}</label>
+                    </div>
+                  )
+                })
+              }
+            </div>
+            {/* End */}
+
+            {/* Correct answer */}
+            <div className="correct">
+              <div className="input-field">
+                <input
+                  id="correct"
+                  type="number"
+                  className="validate"
+                  defaultValue={data.correct}
+                />
+                <label className="active" htmlFor="correct">Correct</label>
+              </div>
+            </div>
+            {/* End */}
+
+          </div>
+        </div>
+
+      </div>
+    )
   }
 
   render() {
@@ -144,7 +257,24 @@ class ManageTask extends Component {
                     </div>
                   </div>
 
-                  {/* TODO: Display Question Set */}
+                  <div className="question-set">
+                    <div className="row">
+                      <p className="col s2 m2 l2 left-align"> Question Set </p>
+                      <div className="left-align col s10 m10 l10">
+                        {
+                          this.state.selectedTaskData ? (
+                            this.state.selectedTaskData.data.questionSet.map(data => {
+                              return this.renderQuestionSet(data)
+                            })
+                          ) : (
+                              // Case for null
+                              <span>None</span>
+                            )
+                        }
+                      </div>
+
+                    </div>
+                  </div>
 
                 </div>
               </div>
