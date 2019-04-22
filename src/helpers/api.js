@@ -39,9 +39,12 @@ class API {
   }
 
   getPrograms(stateHandler) {
-    axiosClient.get("programs")
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS)
     .then((response) => {
-      stateHandler({programs: response.data.data.programs});
+      stateHandler({
+        apiResponse: true,
+        programs: response.data.data.programs
+      });
     })
   }
 }
