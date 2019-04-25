@@ -47,6 +47,16 @@ class API {
       });
     })
   }
+
+  updateProgram(updatedProgram, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, updatedProgram)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+  }
 }
 
 const instance = new API();
