@@ -15,6 +15,7 @@ import Team from 'views/team/team.jsx'
 import ManageTask from 'views/content/tasks/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
 import { CONSTANTS } from './helpers/urlConstants';
+import Activities from 'views/content/activities.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -82,6 +83,9 @@ class App extends Component {
               <ManageTask {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
+            <Route exact path={CONSTANTS.ACTIVITIES} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Activities {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
             <Route exact path='/test' render={() => <div>Test</div>} />
 
             <Route render={() => <div>404 Error</div>} />
