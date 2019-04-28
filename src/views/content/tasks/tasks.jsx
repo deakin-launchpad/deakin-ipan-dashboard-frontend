@@ -197,7 +197,7 @@ class ManageTask extends Component {
                         id="task-id"
                         type="number"
                         defaultValue={this.state.selectedTaskId !== null ? (this.state.selectedTaskData.id) : null}
-                        disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
+                        disabled={this.state.selectedTaskId !== null ? "disabled" : false}
                       />
                     </div>
                   </div>
