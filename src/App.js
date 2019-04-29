@@ -10,12 +10,14 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { requestAccessTokenLogin } from 'actions'
 import Login from 'views/login/login.jsx'
 import Home from 'views/home/home.jsx'
+import Programs from 'views/content/programs/programs.jsx'
 import Team from 'views/team/team.jsx'
-import ManageTask from 'views/content/tasks'
+import ManageTask from 'views/content/tasks/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
 import { CONSTANTS } from './helpers/urlConstants';
 import { replacePlaceHolder } from 'helpers/urlHelper.js';
 import Modules from 'views/content/modules.jsx';
+import Activities from 'views/content/activities.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -67,6 +69,14 @@ class App extends Component {
               <Home {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
+            <Route exact path='/content' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Redirect to='/content/programs' /> : <Redirect to='/' />)}
+            />
+
+            <Route exact path='/content/programs' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Programs {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
+
             <Route exact path='/analysis/global' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
             />
@@ -77,6 +87,10 @@ class App extends Component {
 
             <Route exact path={replacePlaceHolder(CONSTANTS.MODULES, [":p_id"])} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Modules {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
+            
+            <Route exact path={CONSTANTS.ACTIVITIES} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Activities {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
             <Route exact path='/test' render={() => <div>Test</div>} />
 

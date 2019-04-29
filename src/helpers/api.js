@@ -44,6 +44,15 @@ class API {
         })
       })
   }
+  
+  getActivitiesData(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
+      .then((response) => {
+        stateHandler({
+          activitiesData: response.data.data.activity
+        })
+      })
+  }
 
   getTasksData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
@@ -55,6 +64,13 @@ class API {
       })
   }
   
+
+  getPrograms(stateHandler) {
+    axiosClient.get("programs")
+    .then((response) => {
+      stateHandler({programs: response.data.data.programs});
+    })
+  }
 }
 
 const instance = new API();

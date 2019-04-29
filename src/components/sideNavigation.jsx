@@ -5,26 +5,25 @@ import { CONSTANTS } from 'helpers/urlConstants'
 
 class NavMobile extends Component {
   componentDidMount() {
-    var elems = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(elems, {});
+    M.AutoInit();
   }
 
   render() {
     return (
-      <ul id="nav-mobile" class="sidenav sidenav-fixed">
+      <ul id="nav-mobile" className="sidenav sidenav-fixed">
         <li>
           <Link to={{ pathname: CONSTANTS.CONTENT }}>
-            Manage Content
+          Manage Content
           </Link>
         </li>
         <li>
           <Link to={{ pathname: CONSTANTS.TRACKING }}>
-            Tracking
+          Tracking
           </Link>
         </li>
         <li>
           <Link to={{ pathname: CONSTANTS.STATISTICS }}>
-            Statistics
+          Statistics
           </Link>
         </li>
       </ul>
