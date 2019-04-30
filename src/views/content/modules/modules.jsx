@@ -3,6 +3,7 @@ import LoadingComponent from '../../../components/loading/loading'
 import { ContentListContainer } from '../../../components/contentListContainer.jsx';
 import API from 'helpers/api.js';
 import M from "materialize-css";
+import { Link } from 'react-router-dom';
 
 class Modules extends React.Component{
   constructor(props){
@@ -108,6 +109,16 @@ class Modules extends React.Component{
     if (!this.state.apiResponse) return (<LoadingComponent />)
     return (
       <div className = "ManageModules">
+        {/* back button */}
+        <div className = "row">
+          <Link className="btn waves-effect waves-light left"
+              to={{
+                pathname: "/content/programs/"
+              }}>
+            <i className="material-icons center">arrow_back</i>
+          </Link>
+        </div>
+
         <div className="title left-align">
           <div className="row valign-wrapper">
             <div className="col s11 m11 l11">
