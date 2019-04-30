@@ -25,6 +25,16 @@ class Modules extends React.Component{
     // console.log("stateHandler");
     // console.log(state);
     this.setState(state);
+    if (this.props.location.state)
+      this.validateModules(this.props.location.state.selectedProgram);
+  }
+
+  validateModules = (program) => {
+    let validatedModulesData = this.state.modulesData.filter((moduleData)=>{
+      if (!program.modules) return false;
+      else return (program.modules.includes(moduleData.id)); 
+    })
+    this.setState({modulesData : validatedModulesData});
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
@@ -66,7 +76,7 @@ class Modules extends React.Component{
             <div className = "row">
               <div className = "offset-s2 offset-m2 offset-l2 col s10 m10 l10 ">
                 <div className="video-container">
-                  <iframe src="https://www.youtube.com/embed/3cAU7lgtiEk"></iframe>
+                  <iframe src={section.data.value}></iframe>
                 </div>
               </div>
             </div>
