@@ -190,6 +190,25 @@ class Modules extends React.Component{
             }
           </div>
         </div>
+        {/* Link to activities and tasks */}
+        {!this.state.selectedModuleId? "":   
+          <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
+            to={{
+              pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/activity",
+              state: {selectedModuleData: this.state.selectedModuleData}
+            }}>
+            Activities
+          </Link>
+        }
+        {!this.state.selectedModuleId? "":
+          <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
+            to={{
+              pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/tasks",
+              state: {selectedModuleData: this.state.selectedModuleData}
+            }}>
+            Tasks
+          </Link>
+        }
       </div>
     )
   }
