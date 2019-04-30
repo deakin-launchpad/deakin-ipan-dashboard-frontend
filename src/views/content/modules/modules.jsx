@@ -35,6 +35,60 @@ class Modules extends React.Component{
     API.getModules(this.stateHandler);
   }
 
+  renderSection = (section) => {
+    switch (section.type) {
+      case "TEXT":
+        return (
+          <div className="row">
+            <p className="col s2 m2 l2 left-align"> Section type: TEXT </p>
+            <div className="input-field col s10">
+              <textarea id="section-text" type="text" className = "materialize-textarea validate"
+                value={section.data.value} disabled="disabled"/>
+            </div>
+          </div>
+        );
+       
+      case "VIDEO":
+        return (
+          <div>
+            <div className="row">
+              <p className="col s2 m2 l2 left-align"> Section type: VIDEO </p>
+              <div className="input-field col s10">
+                <textarea id="section-videoURL" type="text" className = "materialize-textarea validate"
+                  value={section.data.value} disabled="disabled"/>
+              </div>            
+            </div>
+            <div className = "row">
+              <div className = "offset-s2 offset-m2 offset-l2 col s10 m10 l10 ">
+                <div className="video-container">
+                  <iframe src="https://www.youtube.com/embed/3cAU7lgtiEk"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "IMAGE":
+        return (
+          <div>
+            <div className="row">
+              <p className="col s2 m2 l2 left-align"> Section type: IMAGE </p>
+              <div className="input-field col s10">
+                <textarea id="section-imageURL" type="text" className = "materialize-textarea validate"
+                  value={section.data.value} disabled="disabled"/>
+              </div> 
+            </div>
+            <div className = "row">
+              <div className = "offset-s2 offset-m2 offset-l2 col s10 m10 l10 ">
+                <img className ="responsive-img" src = {section.data.value}></img>
+               </div> 
+            </div>
+          </div>
+        );
+      
+    }
+  }
+
   render(){
     if (!this.state.apiResponse) return (<LoadingComponent />)
     return (
@@ -92,6 +146,18 @@ class Modules extends React.Component{
                           value={this.state.selectedModuleData.shortDescription} disabled="disabled"/>
                       </div>
                     </div>
+                    {/* module sections */}
+                    {
+                      this.state.selectedModuleData.sections.length > 0 ? (
+                        this.state.selectedModuleData.sections.map(section =>{
+                          return (
+                            <div key = {section._id}>
+                              {this.renderSection(section)}
+                            </div>
+                            )
+                        })
+                      ) : <div></div>
+                    }
                   </div>
                 </div>
               </div>
