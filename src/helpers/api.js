@@ -36,11 +36,11 @@ class API {
       })
   }
 
-  getModule(stateHandler, p_id, m_id) {
-    axiosClient.get(replacePlaceHolder(CONSTANTS.MODULE, [p_id, m_id]))
+  getModules(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_MODULES)
       .then((response)=> {
         stateHandler({
-          module: response.data.data.module,
+          modulesData: response.data.data.modules,
         })
       })
   }
