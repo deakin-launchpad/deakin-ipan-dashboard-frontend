@@ -16,7 +16,7 @@ import ManageTask from 'views/content/tasks/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
 import { CONSTANTS } from './helpers/urlConstants';
 import { replacePlaceHolder } from 'helpers/urlHelper.js';
-import Modules from 'views/content/modules.jsx';
+import Modules from 'views/content/modules/modules.jsx';
 import Activities from 'views/content/activities.jsx';
 
 class App extends Component {

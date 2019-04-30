@@ -33,6 +33,7 @@ class API {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_MODULES)
       .then((response)=> {
         stateHandler({
+          apiResponse: true,
           modulesData: response.data.data.modules,
         })
       })
