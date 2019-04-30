@@ -29,13 +29,6 @@ class API {
       })
   }
 
-  getProgram = (stateHandler, p_id) => {
-    axiosClient.get(replacePlaceHolder(CONSTANTS.PROGRAM, [p_id]))
-      .then((response) => {
-        stateHandler({ program: response.data.data.programs })
-      })
-  }
-
   getModules(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_MODULES)
       .then((response)=> {
