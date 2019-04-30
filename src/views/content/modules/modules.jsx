@@ -28,7 +28,12 @@ class Modules extends React.Component{
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
-    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData });
+    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData },
+      () =>{
+        document.querySelectorAll('.materialize-textarea').forEach(textarea => {
+          M.textareaAutoResize(textarea);
+        })
+      });
   }
 
   getModules = () => {
