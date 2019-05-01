@@ -130,7 +130,7 @@ class Programs extends Component {
           </div>
         </div>
 
-        <Link className="btn waves-effect waves-light right" id="modules-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
+        <Link className="btn waves-effect waves-light right" id="modules-link" disabled={typeof this.state.selectedProgramId === "number" && this.state.editFlag ? "" : "disabled"}
           to={{
             pathname: "/content/programs/" + this.state.selectedProgramId + "/modules",
             state: {selectedProgram: this.state.selectedProgram}
