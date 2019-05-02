@@ -50,9 +50,8 @@ class Programs extends Component {
         draft[existingProgramIndex].title = this.state.selectedProgram.title;
         draft[existingProgramIndex].description = this.state.selectedProgram.description;
       });
-      this.setState({ programs });
 
-      this.setState({ editFlag: !this.state.editFlag });
+      this.setState({ programs, editFlag: !this.state.editFlag });
     });
   }
 
@@ -121,7 +120,7 @@ class Programs extends Component {
                   </div>
                 </div>
 
-                <button className="btn waves-effect waves-light" type="submit" name="action" disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
+                <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedProgramId === "number" && this.state.editFlag ? "" : "disabled"}
                         onClick={this.editProgram}>Submit
                   <i className="material-icons right">send</i>
                 </button>
@@ -130,7 +129,7 @@ class Programs extends Component {
           </div>
         </div>
 
-        <Link className="btn waves-effect waves-light right" id="modules-link" disabled={typeof this.state.selectedProgramId === "number" && this.state.editFlag ? "" : "disabled"}
+        <Link className="btn waves-effect waves-light right" id="modules-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
           to={{
             pathname: "/content/programs/" + this.state.selectedProgramId + "/modules",
             state: {selectedProgram: this.state.selectedProgram}
