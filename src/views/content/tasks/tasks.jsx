@@ -31,11 +31,11 @@ class ManageTask extends Component {
 
   componentDidMount() {
     M.AutoInit()
-    this.getTasksData()
+    this.getTaskData()
   }
 
-  getTasksData = () => {
-    API.getTasksData(this.stateHandler);
+  getTaskData = () => {
+    API.getTaskData(this.stateHandler);
   }
 
   onClickAction = (selectedTaskId, selectedTaskData) => {
@@ -85,6 +85,10 @@ class ManageTask extends Component {
         alert('Not supported. Contact Administrator')
         break;
     }
+  }
+
+  updateTask = () => {
+    API.updateTaskData(this.stateHandler, this.state.editedTaskData)
   }
 
   renderQuestionSet = (data, i) => {
@@ -364,9 +368,13 @@ class ManageTask extends Component {
                             )
                         }
                       </div>
-
                     </div>
                   </div>
+
+                  <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedTaskId === "number" && this.state.editFlag ? "" : "disabled"}
+                    onClick={this.updateTask}>Submit
+                  <i className="material-icons right">send</i>
+                  </button>
 
                 </div>
               </div>
