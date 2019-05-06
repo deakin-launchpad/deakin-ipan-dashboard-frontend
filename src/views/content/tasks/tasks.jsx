@@ -4,7 +4,6 @@ import LoadingComponent from '../../../components/loading/loading'
 import { ContentListContainer } from '../../../components/contentListContainer'
 import API from '../../../helpers/api'
 import M from "materialize-css"
-import produce from "immer"
 
 const ANSWER_TYPES = ["ANSWER_BOTH", "ANSWER_POPUP", "ANSWER_SUMMARY"]
 const QUESTION_TYPES = ["ONE_CHOICE"]
