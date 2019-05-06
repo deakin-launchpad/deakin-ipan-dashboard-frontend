@@ -11,5 +11,6 @@ export const CONSTANTS = {
 
   // SWAGGER API
   ASSET_MANAGEMENT_ACTIVITIES: "/assetmanagment/activity",
-  ASSET_MANAGEMENT_TASKS: "/assetmanagment/tasks"
+  ASSET_MANAGEMENT_TASKS: "/assetmanagment/tasks",
+  ASSET_MANAGEMENT_PROGRAMS: "/assetmanagment/programs"
 }
