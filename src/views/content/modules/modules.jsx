@@ -184,6 +184,11 @@ class Modules extends React.Component{
                         })
                       ) : <div></div>
                     }
+                    {/* submit button */}
+                    <button className="btn waves-effect waves-light" type="submit" name="action" disabled={!this.state.editFlag ? "disabled" : false}
+                        onClick={this.editModule}>Submit
+                      <i className="material-icons right">send</i>
+                    </button>
                   </div>
                 </div>
               </div>
