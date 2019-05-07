@@ -40,17 +40,19 @@ class Modules extends React.Component{
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
     this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData },
-      () =>{
-        document.querySelectorAll('.materialize-textarea').forEach(textarea => {
-          M.textareaAutoResize(textarea);
-        })
-      });
+      this.resizeTextArea);
   }
 
   getModules = () => {
     API.getModules(this.stateHandler);
   }
 
+  resizeTextArea = () =>{
+    document.querySelectorAll('.materialize-textarea').forEach(textarea => {
+      M.textareaAutoResize(textarea);
+    })
+  }
+  
   editModule = () => {
     this.setState({ apiResponse: false });
     API.updateModule(this.state.selectedModuleData, this.stateHandler, () => {
