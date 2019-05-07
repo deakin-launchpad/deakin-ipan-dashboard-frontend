@@ -38,6 +38,16 @@ class API {
         })
       })
   }
+
+  updateModule(updatedModule, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_MODULES, updatedModule)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+  }
   
   getActivitiesData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
