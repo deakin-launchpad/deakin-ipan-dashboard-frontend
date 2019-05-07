@@ -51,6 +51,42 @@ class Modules extends React.Component{
     API.getModules(this.stateHandler);
   }
 
+  editModule = () => {
+    this.setState({ apiResponse: false });
+    API.updateModule(this.state.selectedModuleData, this.stateHandler, () => {
+      let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
+      let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
+      updatedModulesData[updatedModuleIndex] = this.state.selectedModuleData;
+      this.setState({ modulesData: updatedModulesData}, this.resizeTextArea);
+      this.setState({ editFlag: !this.state.editFlag });
+    });
+  }
+
+  handleIdChange = (event) => {
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    updatedModuleData.id = event.target.value;
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
+  handleTitleChange = (event) => {
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    updatedModuleData.title = event.target.value;
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
+  handleDescriptionChange = (event) => {
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    updatedModuleData.shortDescription = event.target.value;
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
+  handleSectionChange = (event, sectionId) => {
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedSectionIndex = updatedModuleData.sections.findIndex((p) => p._id === sectionId);
+    updatedModuleData.sections[updatedSectionIndex].data.value = event.target.value;
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
   renderSection = (section) => {
     switch (section.type) {
       case "TEXT":
@@ -59,7 +95,8 @@ class Modules extends React.Component{
             <p className="col s2 m2 l2 left-align"> Section type: TEXT </p>
             <div className="input-field col s10">
               <textarea id="section-text" type="text" className = "materialize-textarea validate"
-                value={section.data.value} disabled="disabled"/>
+                value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
+                onChange={(e)=>this.handleSectionChange(e, section._id)} />
             </div>
           </div>
         );
@@ -71,7 +108,8 @@ class Modules extends React.Component{
               <p className="col s2 m2 l2 left-align"> Section type: VIDEO </p>
               <div className="input-field col s10">
                 <textarea id="section-videoURL" type="text" className = "materialize-textarea validate"
-                  value={section.data.value} disabled="disabled"/>
+                  value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
+                  onChange={(e)=>this.handleSectionChange(e, section._id)}/>
               </div>            
             </div>
             <div className = "row">
@@ -91,7 +129,8 @@ class Modules extends React.Component{
               <p className="col s2 m2 l2 left-align"> Section type: IMAGE </p>
               <div className="input-field col s10">
                 <textarea id="section-imageURL" type="text" className = "materialize-textarea validate"
-                  value={section.data.value} disabled="disabled"/>
+                  value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
+                  onChange={(e)=>this.handleSectionChange(e, section._id)}/>
               </div> 
             </div>
             <div className = "row">
@@ -106,7 +145,7 @@ class Modules extends React.Component{
   }
 
   render(){
-    if (!this.state.apiResponse) return (<LoadingComponent />)
+    if (!this.state.apiResponse) return (<LoadingComponent />);
     return (
       <div className = "ManageModules">
         {/* back button */}
@@ -153,7 +192,8 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module ID </p>
                       <div className="input-field col s10">
                         <input id="module-id" type="number" 
-                          value= {this.state.selectedModuleId} disabled="disabled" />
+                          value= {this.state.selectedModuleId} disabled={!this.state.editFlag ? "disabled" : false}
+                          onChange={this.handleIdChange} />
                       </div>
                     </div>
                     {/* module title */}
@@ -161,7 +201,8 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module Title </p>
                       <div className="input-field col s10">
                         <input id="module-title" type="text" 
-                          value={this.state.selectedModuleData.title} disabled={!this.state.editFlag ? "disabled" : false}/>
+                          value={this.state.selectedModuleData.title} disabled={!this.state.editFlag ? "disabled" : false}
+                          onChange={this.handleTitleChange}/>
                       </div>
                     </div>
                     {/* module description */}
@@ -169,7 +210,8 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module short description </p>
                       <div className="input-field col s10">
                         <textarea id="module-desc" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleData.shortDescription} disabled="disabled"/>
+                          value={this.state.selectedModuleData.shortDescription} disabled={!this.state.editFlag ? "disabled" : false}
+                          onChange={this.handleDescriptionChange}/>
                       </div>
                     </div>
                     {/* module sections */}
