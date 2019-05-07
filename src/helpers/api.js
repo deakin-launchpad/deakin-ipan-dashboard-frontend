@@ -48,7 +48,7 @@ class API {
       })
   }
 
-  getTasksData(stateHandler) {
+  getTaskData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
       .then((response) => {
         stateHandler({
@@ -59,10 +59,32 @@ class API {
   }
   
 
+  updateTaskData(stateHandler, data) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_TASKS, data)
+      .then((response) => {
+        console.log(response)
+        stateHandler({
+        })
+      })
+  }
+
   getPrograms(stateHandler) {
-    axiosClient.get("programs")
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS)
     .then((response) => {
-      stateHandler({programs: response.data.data.programs});
+      stateHandler({
+        apiResponse: true,
+        programs: response.data.data.programs
+      });
+    })
+  }
+
+  updateProgram(updatedProgram, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, updatedProgram)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
     })
   }
 }
