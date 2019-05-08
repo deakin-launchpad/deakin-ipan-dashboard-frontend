@@ -83,7 +83,7 @@ class App extends Component {
               <ManageTask {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
-            <Route exact path={CONSTANTS.ACTIVITIES} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Route exact path={'/content/programs/:p_id/modules/:m_id/activities'} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Activities {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
             <Route exact path='/test' render={() => <div>Test</div>} />
