@@ -25,7 +25,15 @@ class Activities extends Component {
 
   stateHandler = (state) => {
     this.setState(state);
-    this.props.parentStateHandler(state);
+    if (this.props.location.state)
+      this.validateActivities(this.props.location.state.selectedModule);
+  }
+  validateActivities = (module) => {
+    let validatedActivities = this.state.activities.filter((activities) => {
+      if (!module.activities) return false;
+      else return (module.activities.includes(activities.id));
+    });
+    this.setState({ activities: validatedActivities });
   }
 
   getActivities = () => {
@@ -43,9 +51,8 @@ class Activities extends Component {
       shortDescription: this.state.selectedActivity.shortDescription
     };
 
-
-
     this.setState({ apiResponse: false });
+
     API.updateActivity(changedActivity, this.stateHandler, () => {
       let existingActivityIndex = this.state.activities.findIndex((p) => p.id === this.state.selectedActivity.id);
       const activities = produce(this.state.activities, draft => {
@@ -57,9 +64,7 @@ class Activities extends Component {
     });
 
 
-
   }
-
 
   handleTitleChange = (event) => {
     const selectedActivity = produce(this.state.selectedActivity, draft => {
@@ -73,8 +78,6 @@ class Activities extends Component {
     });
     this.setState({ selectedActivity });
   }
-
-
 
   render() {
     if (!this.state.apiResponse) return (<LoadingComponent />)
