@@ -49,6 +49,15 @@ class API {
       })
   }
 
+  updateTaskData(stateHandler, data) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_TASKS, data)
+      .then((response) => {
+        console.log(response)
+        stateHandler({
+        })
+      })
+  }
+
   getPrograms(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS)
       .then((response) => {
