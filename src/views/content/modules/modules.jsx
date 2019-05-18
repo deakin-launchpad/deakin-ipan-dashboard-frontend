@@ -142,6 +142,14 @@ class Modules extends React.Component{
             </div>
           </div>
         );
+      default:
+        return(
+          <div>
+            <div className="row">
+              <p className="col s2 m2 l2 left-align"> Section type: UNDEFINED </p>
+            </div>
+          </div>
+        );
       
     }
   }
