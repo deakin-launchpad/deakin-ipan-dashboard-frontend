@@ -49,22 +49,23 @@ class API {
     })
   }
   
-  getActivitiesData(stateHandler) {
+  getActivities(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
       .then((response) => {
         stateHandler({
-          activitiesData: response.data.data.activity
-        })
+          apiResponse: true,
+          activities: response.data.data.activity
+        });
       })
   }
 
-  getTaskData(stateHandler) {
-    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
-      .then((response) => {
+  updateActivity(updatedActivity, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES, updatedActivity)
+      .then(() => {
         stateHandler({
-          apiResponse: true,
-          tasksData: response.data.data.tasks
-        })
+          apiResponse: true
+        });
+        callback();
       })
   }
   
@@ -80,23 +81,40 @@ class API {
 
   getPrograms(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS)
-    .then((response) => {
-      stateHandler({
-        apiResponse: true,
-        programs: response.data.data.programs
-      });
-    })
+      .then((response) => {
+        stateHandler({
+          apiResponse: true,
+          programs: response.data.data.programs
+        });
+      })
   }
 
   updateProgram(updatedProgram, stateHandler, callback) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, updatedProgram)
-    .then(() => {
-      stateHandler({
-        apiResponse: true
-      });
-      callback();
-    })
+      .then(() => {
+        stateHandler({
+          apiResponse: true
+        });
+        callback();
+      })
   }
+
+
+
+
+  getTasksData(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
+      .then((response) => {
+        stateHandler({
+          apiResponse: true,
+          tasksData: response.data.data.tasks
+        })
+      })
+  }
+
+
+
+
 }
 
 const instance = new API();
