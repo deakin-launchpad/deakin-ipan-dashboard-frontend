@@ -1,6 +1,7 @@
 import AppHelper from "helpers/AppHelper.js";
 import { axiosClient } from 'index.js';
 import { CONSTANTS } from "./urlConstants";
+import { replacePlaceHolder } from 'helpers/urlHelper.js';
 
 class API {
 
@@ -28,7 +29,26 @@ class API {
       })
   }
 
+  getModules(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_MODULES)
+      .then((response)=> {
+        stateHandler({
+          apiResponse: true,
+          modulesData: response.data.data.modules,
+        })
+      })
+  }
 
+  updateModule(updatedModule, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_MODULES, updatedModule)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+  }
+  
   getActivities(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
       .then((response) => {
@@ -48,6 +68,7 @@ class API {
         callback();
       })
   }
+  
 
   updateTaskData(stateHandler, data) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_TASKS, data)

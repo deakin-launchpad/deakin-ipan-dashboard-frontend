@@ -185,8 +185,8 @@ td:first-child, th:first-child {
   padding: 0 10.875px;
 }
 
-// MANGE CONTENT TASK
-.ManageTasks, .ManagePrograms {
+// MANGE CONTENT TASK, PROGRAM, MODULE
+.ManageTasks, .ManagePrograms, .ManageModules {
   @extend .custom-container-padding;
   .card-action {
     @extend .custom-card-padding;
