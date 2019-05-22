@@ -89,7 +89,7 @@ class API {
       })
   }
 
-  updateProgram(updatedProgram, stateHandler, callback) {
+  updateProgram(updatedProgram, stateHandler, callback, errCallback) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, updatedProgram)
       .then(() => {
         stateHandler({
@@ -97,10 +97,23 @@ class API {
         });
         callback();
       })
+      .catch((error) => {
+        errCallback(error);
+      });
   }
 
-
-
+  createProgram(newProgram, stateHandler, callback, errCallback) {
+    axiosClient.post(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, newProgram)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+    .catch((error) => {
+      errCallback(error);
+    });
+  }
 
   getTasksData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
