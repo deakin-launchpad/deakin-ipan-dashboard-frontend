@@ -193,7 +193,7 @@ class Modules extends React.Component{
             </div>
 
             {
-              !this.state.selectedModuleId? "":
+              // !this.state.selectedModuleId? "":
               <div className="col s8 m8 l8">
                 <div className="card">
                   <div className="card-content">
@@ -202,7 +202,7 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module ID </p>
                       <div className="input-field col s10">
                         <input id="module-id" type="number" 
-                          value= {this.state.selectedModuleId} disabled={!this.state.editFlag ? "disabled" : false}
+                          value= {this.state.selectedModuleId?this.state.selectedModuleId:""} disabled={!this.state.editFlag ? "disabled" : false}
                           onChange={this.handleIdChange} />
                       </div>
                     </div>
@@ -211,7 +211,7 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module Title </p>
                       <div className="input-field col s10">
                         <input id="module-title" type="text" 
-                          value={this.state.selectedModuleData.title} disabled={!this.state.editFlag ? "disabled" : false}
+                          value={this.state.selectedModuleId?this.state.selectedModuleData.title:""} disabled={!this.state.editFlag ? "disabled" : false}
                           onChange={this.handleTitleChange}/>
                       </div>
                     </div>
@@ -220,21 +220,23 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module short description </p>
                       <div className="input-field col s10">
                         <textarea id="module-desc" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleData.shortDescription} disabled={!this.state.editFlag ? "disabled" : false}
+                          value={this.state.selectedModuleId?this.state.selectedModuleData.shortDescription:""} disabled={!this.state.editFlag ? "disabled" : false}
                           onChange={this.handleDescriptionChange}/>
                       </div>
                     </div>
                     {/* module sections */}
                     {
-                      this.state.selectedModuleData.sections.length > 0 ? (
-                        this.state.selectedModuleData.sections.map(section =>{
-                          return (
-                            <div key = {section._id}>
-                              {this.renderSection(section)}
-                            </div>
-                            )
-                        })
-                      ) : <div></div>
+                      !this.state.selectedModuleId?"":(
+                        this.state.selectedModuleData.sections.length > 0 ? (
+                          this.state.selectedModuleData.sections.map(section =>{
+                            return (
+                              <div key = {section._id}>
+                                {this.renderSection(section)}
+                              </div>
+                              )
+                          })
+                        ) : <div></div>
+                      )
                     }
                     {/* submit button */}
                     <button className="btn waves-effect waves-light" type="submit" name="action" disabled={!this.state.editFlag ? "disabled" : false}
