@@ -235,7 +235,7 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module ID </p>
                       <div className="input-field col s10">
                         <input id="module-id" type="number" 
-                          value= {this.state.selectedModuleId?this.state.selectedModuleId:""} disabled={!this.state.editFlag ? "disabled" : false}
+                          value= {this.state.selectedModuleId?this.state.selectedModuleId:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleIdChange} />
                       </div>
                     </div>
@@ -243,8 +243,8 @@ class Modules extends React.Component{
                     <div className="row">
                       <p className="col s2 m2 l2 left-align"> Module Title </p>
                       <div className="input-field col s10">
-                        <input id="module-title" type="text" 
-                          value={this.state.selectedModuleId?this.state.selectedModuleData.title:""} disabled={!this.state.editFlag ? "disabled" : false}
+                        <input id="module-title" type="text" className = "materialize-textarea validate"
+                          value={this.state.selectedModuleId?this.state.selectedModuleData.title:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleTitleChange}/>
                       </div>
                     </div>
@@ -253,7 +253,7 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module short description </p>
                       <div className="input-field col s10">
                         <textarea id="module-desc" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleId?this.state.selectedModuleData.shortDescription:""} disabled={!this.state.editFlag ? "disabled" : false}
+                          value={this.state.selectedModuleId?this.state.selectedModuleData.shortDescription:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleDescriptionChange}/>
                       </div>
                     </div>
@@ -288,15 +288,15 @@ class Modules extends React.Component{
                     }
                     {/* sections add*/}
                     <div className = "row">
-                      <button className="btn waves-effect waves-light left" disabled={!this.state.editFlag ? "disabled" : false}
+                      <button className="btn waves-effect waves-light left" disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
                         onClick = {this.handleAddSection}>
                         <i className="material-icons">add</i>
                       </button>
                     </div>
 
                     {/* submit button */}
-                    <button className="btn waves-effect waves-light" type="submit" name="action" disabled={!this.state.editFlag ? "disabled" : false}
-                        onClick={this.editModule}>Submit
+                    <button className="btn waves-effect waves-light" type="submit" name="action" disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
+                        onClick={this.editModule}>{this.state.selectedModuleId?"Submit":"Create"}
                       <i className="material-icons right">send</i>
                     </button>
                   </div>
