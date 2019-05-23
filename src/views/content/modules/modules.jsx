@@ -267,9 +267,9 @@ class Modules extends React.Component{
                     }
 
                     <div className="row">
-                      <button data-target="modal1" class="btn modal-trigger">Text Editor</button>
-                      <div id="modal1" class="modal">
-                        <div class="modal-content">
+                      <button data-target="modal1" className="btn modal-trigger">Text Editor</button>
+                      <div id="modal1" className="modal">
+                        <div className="modal-content">
                           <h5>Text Editor</h5>
                           <ReactQuill
                             value={this.state.text}
@@ -280,11 +280,11 @@ class Modules extends React.Component{
                               placeholder="Start here ..."
                           />
                         </div>
-                        <div class="modal-footer">
-                          <button class="btn waves-effect waves-light">
+                        <div className="modal-footer">
+                          <button className="btn waves-effect waves-light">
                             Save
                         </button>
-                          <button class="btn waves-effect waves-light">
+                          <button className="btn waves-effect waves-light">
                             Discard
                         </button>
                         </div>
