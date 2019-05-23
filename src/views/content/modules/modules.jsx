@@ -39,8 +39,12 @@ class Modules extends React.Component{
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
-    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData },
+    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData, editFlag: false },
       this.resizeTextArea);
+  }
+
+  onCreateAction = () => {
+    this.setState({selectedModuleId: null, editFlag: false});
   }
 
   getModules = () => {
@@ -221,6 +225,7 @@ class Modules extends React.Component{
                   title={'Modules'}
                   data={this.state.modulesData}
                   onClickAction={this.onClickAction}
+                  onCreateAction={this.onCreateAction}
                   selectedTaskId={this.state.selectedModuleId}
                 />
             </div>
