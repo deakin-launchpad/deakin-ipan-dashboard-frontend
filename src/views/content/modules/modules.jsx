@@ -23,8 +23,8 @@ class Modules extends React.Component{
   }
 
   stateHandler = (state) => {
-    // console.log("stateHandler");
-    // console.log(state);
+    console.log("stateHandler");
+    console.log(state);
     this.setState(state);
     if (this.props.location.state)
       this.validateModules(this.props.location.state.selectedProgram);
@@ -101,6 +101,31 @@ class Modules extends React.Component{
     this.setState({ selectedModuleData: updatedModuleData });
   }
 
+  handleAddSection = () => {
+    let addedSection = {
+      type: "TEXT",
+      data: {
+        value: "",
+        misc: []
+      }
+    }
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    updatedModuleData.sections.push(addedSection);
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
+  handleRemoveSection = (removeSection) => {
+    console.log("handleRemoveSection");
+    console.log(removeSection);
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedSections = updatedModuleData.sections.filter(section=>{
+      return (JSON.stringify(section) !== JSON.stringify(removeSection));
+    });
+    console.log(updatedSections);
+    updatedModuleData.sections = updatedSections;
+    console.log(updatedModuleData);
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
   renderSection = (section) => {
     switch (section.type) {
       case "TEXT":
@@ -248,6 +273,11 @@ class Modules extends React.Component{
                                     <option value="IMAGE">IMAGE</option>
                                     <option value="VIDEO">VIDEO</option>
                                   </select>
+                                  {/* section remove */}
+                                  <button className="btn waves-effect waves-light center" disabled={!this.state.editFlag ? "disabled" : false}
+                                    onClick = {()=>this.handleRemoveSection(section)}>
+                                    <i className="material-icons">remove</i>
+                                  </button>
                                 </div>
                                 {this.renderSection(section)}
                               </div>
@@ -256,6 +286,14 @@ class Modules extends React.Component{
                         ) : <div></div>
                       )
                     }
+                    {/* sections add*/}
+                    <div className = "row">
+                      <button className="btn waves-effect waves-light left" disabled={!this.state.editFlag ? "disabled" : false}
+                        onClick = {this.handleAddSection}>
+                        <i className="material-icons">add</i>
+                      </button>
+                    </div>
+
                     {/* submit button */}
                     <button className="btn waves-effect waves-light" type="submit" name="action" disabled={!this.state.editFlag ? "disabled" : false}
                         onClick={this.editModule}>Submit
