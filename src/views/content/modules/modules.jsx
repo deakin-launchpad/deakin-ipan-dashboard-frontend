@@ -276,6 +276,8 @@ class Modules extends React.Component{
                               onChange={this.handleChange}
                               modules={this.modules}
                               formats={this.formats}
+                              theme="snow"
+                              placeholder="Start here ..."
                           />
                         </div>
                         <div class="modal-footer">
