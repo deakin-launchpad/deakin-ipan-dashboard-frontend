@@ -15,6 +15,8 @@ import Team from 'views/team/team.jsx'
 import ManageTask from 'views/content/tasks/tasks'
 import GlobalAnalysis from 'views/global-analysis.jsx'
 import { CONSTANTS } from './helpers/urlConstants';
+import { replacePlaceHolder } from 'helpers/urlHelper.js';
+import Modules from 'views/content/modules/modules.jsx';
 import Activities from 'views/content/activities.jsx';
 
 class App extends Component {
@@ -83,6 +85,10 @@ class App extends Component {
               <ManageTask {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
+            <Route exact path='/content/programs/:p_id/modules' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+              <Modules {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
+            />
+            
             <Route exact path={'/content/programs/:p_id/modules/:m_id/activities'} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Activities {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />

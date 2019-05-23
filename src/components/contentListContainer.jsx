@@ -24,10 +24,12 @@ export const ContentListContainer = (props) => {
               ) : <p> Looks empty </p>
             }
           </div>
+          
           <button className="btn waves-effect waves-light" type="submit" name="action"
-            onClick={() => props.onCreateAction()}>Create
+                  onClick={() => props.onCreateAction()}>Create
             <i className="material-icons right">add</i>
           </button>
+          
         </div>
       </div>
     </div>

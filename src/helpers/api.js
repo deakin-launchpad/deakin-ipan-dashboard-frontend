@@ -1,6 +1,7 @@
 import AppHelper from "helpers/AppHelper.js";
 import { axiosClient } from 'index.js';
 import { CONSTANTS } from "./urlConstants";
+import { replacePlaceHolder } from 'helpers/urlHelper.js';
 
 class API {
 
@@ -28,7 +29,26 @@ class API {
       })
   }
 
+  getModules(stateHandler) {
+    axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_MODULES)
+      .then((response)=> {
+        stateHandler({
+          apiResponse: true,
+          modulesData: response.data.data.modules,
+        })
+      })
+  }
 
+  updateModule(updatedModule, stateHandler, callback) {
+    axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_MODULES, updatedModule)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+  }
+  
   getActivities(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
       .then((response) => {
@@ -65,6 +85,7 @@ class API {
         errCallback(error);
       });
   }
+  
 
   updateTaskData(stateHandler, data) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_TASKS, data)
@@ -85,7 +106,7 @@ class API {
       })
   }
 
-  updateProgram(updatedProgram, stateHandler, callback) {
+  updateProgram(updatedProgram, stateHandler, callback, errCallback) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, updatedProgram)
       .then(() => {
         stateHandler({
@@ -93,10 +114,23 @@ class API {
         });
         callback();
       })
+      .catch((error) => {
+        errCallback(error);
+      });
   }
 
-
-
+  createProgram(newProgram, stateHandler, callback, errCallback) {
+    axiosClient.post(CONSTANTS.ASSET_MANAGEMENT_PROGRAMS, newProgram)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+    .catch((error) => {
+      errCallback(error);
+    });
+  }
 
   getTasksData(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_TASKS)
