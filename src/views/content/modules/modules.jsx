@@ -4,6 +4,8 @@ import { ContentListContainer } from '../../../components/contentListContainer.j
 import API from 'helpers/api.js';
 import M from "materialize-css";
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 class Modules extends React.Component{
   constructor(props){
@@ -14,13 +16,40 @@ class Modules extends React.Component{
       selectedModuleId: null,
       selectedModuleData: null,
       editFlag: false,
+      text: '',
+
     })
+  }
+
+  handleChange = (value) => {
+    console.log(value)
   }
 
   componentDidMount(){
     M.AutoInit();
     this.getModules();
   }
+
+  componentDidUpdate() {
+    M.Modal.init(document.querySelectorAll('.modal'))
+  }
+
+  modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'color': [] }], 
+      ['clean']
+    ],
+  }
+
+  formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent', 'color'
+  ]
 
   stateHandler = (state) => {
     // console.log("stateHandler");
@@ -236,6 +265,30 @@ class Modules extends React.Component{
                         })
                       ) : <div></div>
                     }
+
+                    <div className="row">
+                      <button data-target="modal1" class="btn modal-trigger">Text Editor</button>
+                      <div id="modal1" class="modal">
+                        <div class="modal-content">
+                          <h5>Text Editor</h5>
+                          <ReactQuill
+                            value={this.state.text}
+                              onChange={this.handleChange}
+                              modules={this.modules}
+                              formats={this.formats}
+                          />
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn waves-effect waves-light">
+                            Save
+                        </button>
+                          <button class="btn waves-effect waves-light">
+                            Discard
+                        </button>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* submit button */}
                     <button className="btn waves-effect waves-light" type="submit" name="action" disabled={!this.state.editFlag ? "disabled" : false}
                         onClick={this.editModule}>Submit
