@@ -12,7 +12,8 @@ export const ContentListContainer = (props) => {
               props.data.length > 0 ? (
                 props.data.map(item => {
                   return (
-                    <div key= { item.id }>
+                    <div key={item.id}>
+
                       <p className={"col s11 m11 l11 left-align " + (props.selectedTaskId === item.id ? "active teal lighten-5" : '')} onClick={() => props.onClickAction(item.id, props.data.find(data => data.id === item.id))}>
                         {item.title}
                       </p>
@@ -28,6 +29,7 @@ export const ContentListContainer = (props) => {
                   onClick={() => props.onCreateAction()}>Create
             <i className="material-icons right">add</i>
           </button>
+          
         </div>
       </div>
     </div>

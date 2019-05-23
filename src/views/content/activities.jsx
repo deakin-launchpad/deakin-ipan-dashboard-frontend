@@ -12,9 +12,10 @@ class Activities extends Component {
     this.state = {
       apiResponse: false,
       activities: [],
-      selectedActivity: null,
+      selectedActivity: {},
       selectedActivityId: null,
-      editFlag: false
+      editFlag: false,
+      message: { text: '', type: '' }
     };
   }
 
@@ -36,35 +37,55 @@ class Activities extends Component {
     this.setState({ activities: validatedActivities });
   }
 
+  resetForm = () => {
+    this.setState({ editFlag: false, message: { text: '', type: '' } })
+  }
+
+
   getActivities = () => {
     API.getActivities(this.stateHandler);
   }
   onClickAction = (selectedActivityId, selectedActivity) => {
-    // console.log(selectedActivityId, selectedActivity)
-    this.setState({ selectedActivityId: selectedActivityId, selectedActivity: selectedActivity }, () => M.textareaAutoResize(document.querySelector('.materialize-textarea')))
+    this.setState({ selectedActivityId: selectedActivityId, selectedActivity: selectedActivity }, () => M.textareaAutoResize(document.querySelector('.materialize-textarea')));
+    this.resetForm();
   }
 
-  editActivity = () => {
+  onCreateAction = () => {
+    this.setState({ selectedActivityId: null, selectedActivity: { id: '', title: '', shortdescription: '', coverPhoto: '' } });
+    this.resetForm();
+  }
+
+  createEditActivity = () => {
     let changedActivity = {
-      id: this.state.selectedActivity.id,
+      id: this.state.selectedActivity.id ? this.state.selectedActivity.id : undefined,
       title: this.state.selectedActivity.title,
-      shortDescription: this.state.selectedActivity.shortDescription
+      shortDescription: this.state.selectedActivity.shortDescription,
+      coverPhoto: this.state.selectedActivity.coverPhoto
     };
 
-    this.setState({ apiResponse: false });
+    if (changedActivity.id) {
+      API.updateActivity(changedActivity, this.stateHandler, () => {
+        let existingActivityIndex = this.state.activities.findIndex((p) => p.id ===
+          this.state.selectedActivityId);
+        const activities = produce(this.state.activities, draft => {
+          draft[existingActivityIndex].title = this.state.selectedActivity.title;
+          draft[existingActivityIndex].shortDescription = this.state.selectedActivity.shortDescription;
+          draft[existingActivityIndex].coverPhoto = this.state.selectedActivity.coverPhoto;
 
-    API.updateActivity(changedActivity, this.stateHandler, () => {
-      let existingActivityIndex = this.state.activities.findIndex((p) => p.id === this.state.selectedActivity.id);
-      const activities = produce(this.state.activities, draft => {
-        draft[existingActivityIndex].title = this.state.selectedActivity.title;
-        draft[existingActivityIndex].shortDescription = this.state.selectedActivity.shortDescription;
-      });
+        });
 
-      this.setState({ activities, editFlag: !this.state.editFlag });
-    });
-
-
+        this.setState({ activities, editFlag: !this.state.editFlag, message: { text: "activityUpdated!", type: "success" } });
+      }, (error) => this.setState({
+        message: { text: error.response.data.message, type: "" }
+      }));
+    } else {
+      API.createActivity(changedActivity, this.stateHandler, () => {
+        this.getActivities();
+        this.setState({ message: { text: "Activity created!", type: "success" } })
+      }, (error) => this.setState({ message: { text: error.response.data.message, type: "" } }));
+    }
   }
+
 
   handleTitleChange = (event) => {
     const selectedActivity = produce(this.state.selectedActivity, draft => {
@@ -78,7 +99,12 @@ class Activities extends Component {
     });
     this.setState({ selectedActivity });
   }
-
+  handleCoverPhotoChange = (event) => {
+    const selectedActivity = produce(this.state.selectedActivity, draft => {
+      draft.coverPhoto = event.target.value
+    });
+    this.setState({ selectedActivity });
+  }
   render() {
     if (!this.state.apiResponse) return (<LoadingComponent />)
 
@@ -105,6 +131,7 @@ class Activities extends Component {
                 title={'Activities'}
                 data={this.state.activities}
                 onClickAction={this.onClickAction}
+                onCreateAction={this.onCreateAction}
                 selectedTaskId={this.state.selectedActivityId} />
             </div>
 
@@ -119,7 +146,7 @@ class Activities extends Component {
                       <input
                         id="activity-id"
                         type="number"
-                        value={this.state.selectedActivityId !== null ? (this.state.selectedActivity.id) : null}
+                        value={this.state.selectedActivityId}
                         disabled="disabled"
                       />
                     </div>
@@ -131,7 +158,7 @@ class Activities extends Component {
                       <input
                         id="activity-title"
                         type="text"
-                        value={this.state.selectedActivityId !== null ? (this.state.selectedActivity.title) : null}
+                        value={this.state.selectedActivity.title}
                         disabled={this.state.selectedActivityId !== null && !this.state.editFlag ? "disabled" : false}
                         onChange={this.handleTitleChange}
                       />
@@ -141,21 +168,31 @@ class Activities extends Component {
                   <div className="row">
                     <p className="col s2 m2 l2 left-align"> Short Description </p>
                     <div className="col s10 m10 l10">
-                      <textarea id="activity-description" type="text" className="materialize-textarea validate" value={this.state.selectedActivityId !== null ? (this.state.selectedActivity.shortDescription) : undefined} disabled={this.state.selectedActivityId !== null && !this.state.editFlag ? "disabled" : false}
+                      <textarea id="activity-description" type="text" className="materialize-textarea validate" value={this.state.selectedActivity.shortDescription} disabled={this.state.selectedActivityId !== null && !this.state.editFlag ? "disabled" : false}
                         onChange={this.handleShortDescriptionChange} />
                     </div>
                   </div>
 
-                  <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedActivityId === "number" && this.state.editFlag ? "" : "disabled"}
-                    onClick={this.editActivity}>Submit
-                  <i className="material-icons right">send</i>
-                  </button>
+                  <p className="col s2 m2 l2 left-align"> Cover Photo Url </p>
 
+                  <div className="input-field col s10">
+                    <input id="activity-cover-photo" type="text" value={this.state.selectedActivity.coverPhoto} disabled={this.state.selectedActivityId !== null && !this.state.editFlag ? "disabled" : false}
+                      onChange={this.handleCoverPhotoChange} />
+                  </div>
+                </div>
+
+                <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedActivityId !== "number" || this.state.editFlag ? "" : "disabled"}
+                  onClick={this.createEditActivity}>{typeof this.state.selectedActivityId !== "number" ? "Create" : "Submit"}
+                  <i className="material-icons right">send</i>
+                </button>
+                <div className="row">
+                  <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
 
         <Link className="btn waves-effect waves-light right" id="tasks-link" disabled={this.state.selectedActivityId !== null ? false : "disabled"}
           to={{
@@ -165,7 +202,7 @@ class Activities extends Component {
           Tasks
         </Link>
 
-      </div>
+      </div >
 
     )
   }

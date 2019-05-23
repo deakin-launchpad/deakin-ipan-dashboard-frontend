@@ -59,7 +59,7 @@ class API {
       })
   }
 
-  updateActivity(updatedActivity, stateHandler, callback) {
+  updateActivity(updatedActivity, stateHandler, callback, errCallback) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES, updatedActivity)
       .then(() => {
         stateHandler({
@@ -67,6 +67,23 @@ class API {
         });
         callback();
       })
+      .catch((error) => {
+        errCallback(error);
+      });
+  }
+
+  createActivity(newActivity, stateHandler, callback, errCallback) {
+
+    axiosClient.post(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES, newActivity)
+      .then(() => {
+        stateHandler({
+          apiResponse: true
+        });
+        callback();
+      })
+      .catch((error) => {
+        errCallback(error);
+      });
   }
   
 
