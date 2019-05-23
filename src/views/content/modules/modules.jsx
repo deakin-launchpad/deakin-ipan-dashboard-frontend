@@ -54,8 +54,13 @@ class Modules extends React.Component{
   }
   
   editModule = () => {
+    //work around the "_id" issue in module sections by delete the "_id" field when send data to server
+    let updatedModuleData = this.state.selectedModuleData;
+    updatedModuleData.sections.map(section=>{
+      delete section._id;
+    });
     this.setState({ apiResponse: false });
-    API.updateModule(this.state.selectedModuleData, this.stateHandler, () => {
+    API.updateModule(updatedModuleData, this.stateHandler, () => {
       let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
       updatedModulesData[updatedModuleIndex] = this.state.selectedModuleData;
@@ -233,20 +238,18 @@ class Modules extends React.Component{
                         this.state.selectedModuleData.sections.length > 0 ? (
                           this.state.selectedModuleData.sections.map(section =>{
                             return (
-                              <div key = {section._id}>
-                                <div className="row">
-                                  <div class="input-field col s2 m2 l2">
-                                    <p>Section type</p>
-                                    <select class = "browser-default" value = {section.type} disabled={!this.state.editFlag ? "disabled" : false}
-                                        onChange = {(e)=>this.handleSectionTypeChange(e, section._id)}>
-                                      <option value="">Choose section type</option>
-                                      <option value="TEXT">TEXT</option>
-                                      <option value="IMAGE">IMAGE</option>
-                                      <option value="VIDEO">VIDEO</option>
-                                    </select>
-                                  </div>
-                                  {this.renderSection(section)}
+                              <div className="row" key = {section._id}>
+                                <div className="input-field col s2 m2 l2">
+                                  <p>Section type</p>
+                                  <select className = "browser-default" value = {section.type} disabled={!this.state.editFlag ? "disabled" : false}
+                                      onChange = {(e)=>this.handleSectionTypeChange(e, section._id)}>
+                                    <option value="">Choose section type</option>
+                                    <option value="TEXT">TEXT</option>
+                                    <option value="IMAGE">IMAGE</option>
+                                    <option value="VIDEO">VIDEO</option>
+                                  </select>
                                 </div>
+                                {this.renderSection(section)}
                               </div>
                               )
                           })
