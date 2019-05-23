@@ -89,33 +89,40 @@ class Modules extends React.Component{
     this.setState({ selectedModuleData: updatedModuleData });
   }
 
+  handleSectionTypeChange = (event, sectionId) =>{
+    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedSectionIndex = updatedModuleData.sections.findIndex((p) => p._id === sectionId);
+    updatedModuleData.sections[updatedSectionIndex].type = event.target.value;
+    this.setState({ selectedModuleData: updatedModuleData });
+  }
+
   renderSection = (section) => {
     switch (section.type) {
       case "TEXT":
         return (
-          <div className="row">
-            <p className="col s2 m2 l2 left-align"> Section type: TEXT </p>
-            <div className="input-field col s10">
+          <div className = "col s10 m10 l10">
+            <div className="row">
+              <div className="input-field col s12 m12 l12">
               <textarea id="section-text" type="text" className = "materialize-textarea validate"
                 value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
                 onChange={(e)=>this.handleSectionChange(e, section._id)} />
+              </div>
             </div>
           </div>
         );
        
       case "VIDEO":
         return (
-          <div>
+          <div className = "col s10 m10 l10">
             <div className="row">
-              <p className="col s2 m2 l2 left-align"> Section type: VIDEO </p>
-              <div className="input-field col s10">
+              <div className="input-field col s12 m12 l12">
                 <textarea id="section-videoURL" type="text" className = "materialize-textarea validate"
                   value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
                   onChange={(e)=>this.handleSectionChange(e, section._id)}/>
               </div>            
             </div>
             <div className = "row">
-              <div className = "offset-s2 offset-m2 offset-l2 col s10 m10 l10 ">
+              <div className = "col s12 m12 l12 ">
                 <div className="video-container">
                   <iframe src={section.data.value}></iframe>
                 </div>
@@ -126,17 +133,16 @@ class Modules extends React.Component{
 
       case "IMAGE":
         return (
-          <div>
+          <div className = "col s10 m10 l10">
             <div className="row">
-              <p className="col s2 m2 l2 left-align"> Section type: IMAGE </p>
-              <div className="input-field col s10">
+              <div className="input-field col s12 m12 l12">
                 <textarea id="section-imageURL" type="text" className = "materialize-textarea validate"
                   value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
                   onChange={(e)=>this.handleSectionChange(e, section._id)}/>
               </div> 
             </div>
             <div className = "row">
-              <div className = "offset-s2 offset-m2 offset-l2 col s10 m10 l10 ">
+              <div className = "col s12 m12 l12 ">
                 <img className ="responsive-img" src = {section.data.value}></img>
                </div> 
             </div>
@@ -145,9 +151,6 @@ class Modules extends React.Component{
       default:
         return(
           <div>
-            <div className="row">
-              <p className="col s2 m2 l2 left-align"> Section type: UNDEFINED </p>
-            </div>
           </div>
         );
       
@@ -231,7 +234,19 @@ class Modules extends React.Component{
                           this.state.selectedModuleData.sections.map(section =>{
                             return (
                               <div key = {section._id}>
-                                {this.renderSection(section)}
+                                <div className="row">
+                                  <div class="input-field col s2 m2 l2">
+                                    <p>Section type</p>
+                                    <select class = "browser-default" value = {section.type} disabled={!this.state.editFlag ? "disabled" : false}
+                                        onChange = {(e)=>this.handleSectionTypeChange(e, section._id)}>
+                                      <option value="">Choose section type</option>
+                                      <option value="TEXT">TEXT</option>
+                                      <option value="IMAGE">IMAGE</option>
+                                      <option value="VIDEO">VIDEO</option>
+                                    </select>
+                                  </div>
+                                  {this.renderSection(section)}
+                                </div>
                               </div>
                               )
                           })
@@ -253,7 +268,7 @@ class Modules extends React.Component{
         {!this.state.selectedModuleId? "":   
           <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
             to={{
-              pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/activity",
+              pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/activities",
               state: {selectedModuleData: this.state.selectedModuleData}
             }}>
             Activities
