@@ -1,13 +1,13 @@
 export const CONSTANTS = {
-  TRACKING:           "/tracking",
-  HOME:               "/home",
-  STATISTICS:         "/statistics",
+  TRACKING: "/tracking",
+  HOME: "/home",
+  STATISTICS: "/statistics",
 
-  CONTENT:            "/content",
-  PROGRAMS:           "/programs",
-  MODULES:            "/content/programs/modules",
-  TASKS:              "/content/programs/modules/tasks",
-  ACTIVITIES:         "/content/programs/modules/activities",
+  CONTENT: "/content",
+  PROGRAMS: "/programs",
+  MODULES: "/content/programs/modules",
+  TASKS: "/content/programs/:id/modules/:id/tasks",
+  ACTIVITIES: "/content/programs/modules/activities",
 
 
   // SWAGGER API

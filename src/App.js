@@ -81,14 +81,14 @@ class App extends Component {
               <GlobalAnalysis {...props} parentState={this.state} /> : <Redirect to='/' />)}
             />
 
-            <Route exact path={CONSTANTS.TASKS} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Route exact path={replacePlaceHolder(CONSTANTS.TASKS, [":p_id", ":m_id"])} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <ManageTask {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
 
             <Route exact path='/content/programs/:p_id/modules' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Modules {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
-            
+
             <Route exact path={'/content/programs/:p_id/modules/:m_id/activities'} render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
               <Activities {...props} parentStateHandler={this.stateHandler} /> : <Redirect to='/' />)}
             />
