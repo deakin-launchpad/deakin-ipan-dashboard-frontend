@@ -19,7 +19,6 @@ class Modules extends React.Component{
       editFlag: false,
       message: { text: '', type: '' },
       text: '',
-
     })
   }
 
@@ -383,8 +382,10 @@ class Modules extends React.Component{
                         onClick = {this.handleAddSection}>
                         <i className="material-icons">add</i>
                       </button>
+
+                    {/* Text editor */}
                     <div className="row">
-                      <button data-target="modal1" className="btn modal-trigger">Text Editor</button>
+                      <button data-target="modal1" className="btn modal-trigger">Add Section</button>
                       <div id="modal1" className="modal">
                         <div className="modal-content">
                           <h5>Text Editor</h5>
