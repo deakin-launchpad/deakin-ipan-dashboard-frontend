@@ -182,10 +182,12 @@ class Activities extends Component {
                   </div>
                 </div>
 
-                <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedActivityId !== "number" || this.state.editFlag ? "" : "disabled"}
-                  onClick={this.createEditActivity}>{typeof this.state.selectedActivityId !== "number" ? "Create" : "Submit"}
-                  <i className="material-icons right">send</i>
-                </button>
+                <div className="row">
+                  <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedActivityId !== "number" || this.state.editFlag ? "" : "disabled"}
+                    onClick={this.createEditActivity}>{typeof this.state.selectedActivityId !== "number" ? "Create" : "Submit"}
+                    <i className="material-icons right">send</i>
+                  </button>
+                </div>
                 <div className="row">
                   <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
                 </div>
