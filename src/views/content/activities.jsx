@@ -27,7 +27,7 @@ class Activities extends Component {
   stateHandler = (state) => {
     this.setState(state);
     if (this.props.location.state)
-      this.validateActivities(this.props.location.state.selectedModule);
+      this.validateActivities(this.props.location.state.selectedModuleData);
   }
   validateActivities = (module) => {
     let validatedActivities = this.state.activities.filter((activities) => {
