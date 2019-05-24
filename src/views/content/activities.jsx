@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import LoadingComponent from '../../components/loading/loading'
 import { ContentListContainer } from '../../components/contentListContainer'
 import M from "materialize-css"
@@ -8,7 +7,7 @@ import API from 'helpers/api.js';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const htmlToText = require('html-to-text');
+// const htmlToText = require('html-to-text');
 
 let TEXT_EDITOR_VALUE
 
@@ -27,6 +26,7 @@ class Activities extends Component {
   }
 
   handleTextEditorChange = (value) => {
+    console.log(TEXT_EDITOR_VALUE)
     return TEXT_EDITOR_VALUE = value
   }
 
