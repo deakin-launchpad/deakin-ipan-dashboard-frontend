@@ -5,6 +5,12 @@ import { ContentListContainer } from '../../components/contentListContainer'
 import M from "materialize-css"
 import produce from "immer";
 import API from 'helpers/api.js';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+const htmlToText = require('html-to-text');
+
+let TEXT_EDITOR_VALUE
 
 class Activities extends Component {
   constructor(props) {
@@ -15,13 +21,90 @@ class Activities extends Component {
       selectedActivity: {},
       selectedActivityId: null,
       editFlag: false,
-      message: { text: '', type: '' }
+      message: { text: '', type: '' },
+      text: '',
     };
+  }
+
+  handleTextEditorChange = (value) => {
+    return TEXT_EDITOR_VALUE = value
+  }
+
+  savePlainText = () => {
+    // const convertHTMLToText = htmlToText.fromString(TEXT_EDITOR_VALUE, {
+    //   wordwrap: 130
+    // });
+    // let sectionsArr = this.state.newModuleData.sections
+    // let obj = { data: { misc: [], value: convertHTMLToText }, type: "TEXT" }
+    // sectionsArr.splice(1, 0, obj)
+    // this.setState({
+    //   newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+    // })
+  }
+
+  saveHTML = () => {
+    // let isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i)
+
+    // // Check if section array[0] got value as HTML
+    // // If true then replace the 0 element
+    // // Otherwise Add obj at position 0
+    // let sectionsArr = this.state.newModuleData.sections.slice()
+    // let checkArrayIsHTML = (sectionsArr.length > 0 ? isHTML(sectionsArr[0].data.value) : false)
+
+    // if (!checkArrayIsHTML) {
+    //   let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE }, type: "TEXT" }
+    //   sectionsArr.push(obj)
+    //   this.setState({
+    //     newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+    //   })
+    // } else {
+    //   let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE } }
+    //   sectionsArr[0] = obj
+    //   this.setState({
+    //     newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+    //   })
+    // }
+  }
+
+  exportToHTML = () => {
+    // const element = document.createElement("a");
+    // const file = new Blob([TEXT_EDITOR_VALUE], { type: 'text/html' });
+    // element.href = URL.createObjectURL(file);
+    // element.download = "modules_section.html";
+    // document.body.appendChild(element); // Required for this to work in FireFox
+    // element.click();
+  }
+
+  modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'color': [] }],
+      ['clean']
+    ],
+  }
+
+  formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent', 'color'
+  ]
+
+  stateHandler = (state) => {
+    this.setState(state);
+    if (this.props.location.state)
+      this.validateModules(this.props.location.state.selectedProgram);
   }
 
   componentDidMount() {
     M.AutoInit();
     this.getActivities();
+  }
+
+  componentDidUpdate() {
+    M.Modal.init(document.querySelectorAll('.modal'))
   }
 
   stateHandler = (state) => {
@@ -179,6 +262,38 @@ class Activities extends Component {
                   <div className="input-field col s10">
                     <input id="activity-cover-photo" type="text" value={this.state.selectedActivity.coverPhoto} disabled={this.state.selectedActivityId !== null && !this.state.editFlag ? "disabled" : false}
                       onChange={this.handleCoverPhotoChange} />
+                  </div>
+                </div>
+
+                {/* Text editor */}
+                <div className="row">
+                  <button data-target="modal1" className="btn modal-trigger">Add Section</button>
+                  <div id="modal1" className="modal">
+                    <div className="modal-content">
+                      <h5>Text Editor</h5>
+                      <ReactQuill
+                        value={this.state.text}
+                        onChange={this.handleTextEditorChange}
+                        modules={this.modules}
+                        formats={this.formats}
+                        theme="snow"
+                        placeholder="Start here ..."
+                      />
+                    </div>
+                    <div className="modal-footer">
+                      <button className="btn-flat waves-effect waves-light" onClick={this.exportToHTML}>
+                        Export to HTML
+                      </button>
+                      <button className="btn-flat waves-effect waves-light" onClick={this.saveHTML}>
+                        Save as HTML
+                      </button>
+                      <button className="btn-flat waves-effect waves-light" onClick={this.savePlainText}>
+                        Save as Plain Text
+                      </button>
+                      <button className="btn waves-effect waves-light">
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
 
