@@ -7,26 +7,53 @@ import { Link } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-class Modules extends React.Component{
-  constructor(props){
+const htmlToText = require('html-to-text');
+
+let TEXT_EDITOR_VALUE
+
+class Modules extends React.Component {
+  constructor(props) {
     super(props);
     this.state = ({
       apiResponse: false,
       modulesData: [],
       selectedModuleId: null,
       selectedModuleData: null,
-      newModuleData: {id:'', title:'', shortDescription:'', sections: []},// to solve React warning of changing between controlled and uncontrolled input
+      newModuleData: { id: '', title: '', shortDescription: '', sections: [] },// to solve React warning of changing between controlled and uncontrolled input
       editFlag: false,
       message: { text: '', type: '' },
       text: '',
     })
   }
 
-  handleChange = (value) => {
-    console.log(value)
+  handleTextEditorChange = (value) => {
+    return TEXT_EDITOR_VALUE = value
   }
 
-  componentDidMount(){
+  savePlainText = () => {
+    const convertHTMLToText = htmlToText.fromString(TEXT_EDITOR_VALUE, {
+      wordwrap: 130
+    });
+    let sectionsArr = this.state.newModuleData.sections
+    let obj = { data: { misc: [], value: convertHTMLToText } }
+    sectionsArr.splice(1, 0, obj)
+    this.setState({
+      newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+    })
+  }
+
+  // TODO: Check array[0] value whether its HTML or text
+  // If text then replace that value
+  saveHTML = () => {
+    let sectionsArr = this.state.newModuleData.sections
+    let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE } }
+    sectionsArr.splice(1, 0, obj)
+    this.setState({
+      newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+    })
+  }
+
+  componentDidMount() {
     M.AutoInit();
     this.getModules();
   }
@@ -41,7 +68,7 @@ class Modules extends React.Component{
       ['bold', 'italic', 'underline', 'strike'],
       ['blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-      [{ 'color': [] }], 
+      [{ 'color': [] }],
       ['clean']
     ],
   }
@@ -59,11 +86,11 @@ class Modules extends React.Component{
   }
 
   validateModules = (program) => {
-    let validatedModulesData = this.state.modulesData.filter((moduleData)=>{
+    let validatedModulesData = this.state.modulesData.filter((moduleData) => {
       if (!program.modules) return false;
-      else return (program.modules.includes(moduleData.id)); 
+      else return (program.modules.includes(moduleData.id));
     })
-    this.setState({modulesData : validatedModulesData});
+    this.setState({ modulesData: validatedModulesData });
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
@@ -72,32 +99,34 @@ class Modules extends React.Component{
   }
 
   onCreateAction = () => {
-    this.setState({selectedModuleId: null, editFlag: false, message: { text: '', type: '' }});
+    this.setState({ selectedModuleId: null, editFlag: false, message: { text: '', type: '' } });
   }
 
   getModules = () => {
     API.getModules(this.stateHandler);
   }
 
-  resizeTextArea = () =>{
+  resizeTextArea = () => {
     document.querySelectorAll('.materialize-textarea').forEach(textarea => {
       M.textareaAutoResize(textarea);
     })
   }
-  
+
   editModule = () => {
     //work around the "_id" issue in module sections by delete the "_id" field when send data to server
     let updatedModuleData = this.state.selectedModuleData;
-    updatedModuleData.sections.map(section=>{
+    updatedModuleData.sections.map(section => {
       return delete section._id;
     });
     API.updateModule(updatedModuleData, this.stateHandler, () => {
       let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
       updatedModulesData[updatedModuleIndex] = this.state.selectedModuleData;
-      this.setState({ modulesData: updatedModulesData, editFlag: false, 
-        message: { text: "Module updated!", type: "success" }}, this.resizeTextArea);
-    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" }}));
+      this.setState({
+        modulesData: updatedModulesData, editFlag: false,
+        message: { text: "Module updated!", type: "success" }
+      }, this.resizeTextArea);
+    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" } }));
   }
 
   createModule = () => {
@@ -117,64 +146,66 @@ class Modules extends React.Component{
     API.createModule(newModuleData, this.stateHandler, () => {
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
       updatedModulesData.push(newModuleData);
-      this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []},
-        message: { text: "Module created!", type: "success" }}, this.resizeTextArea);
-    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" }}));
+      this.setState({
+        modulesData: updatedModulesData, newModuleData: { id: '', title: '', shortDescription: '', sections: [] },
+        message: { text: "Module created!", type: "success" }
+      }, this.resizeTextArea);
+    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" } }));
   }
 
   handleIdChange = (event) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.id = event.target.value;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });// update selected module
-      else this.setState({ newModuleData: updatedModuleData }); //or update a new module
+    else this.setState({ newModuleData: updatedModuleData }); //or update a new module
   }
 
   handleTitleChange = (event) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.title = event.target.value;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleDescriptionChange = (event) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.shortDescription = event.target.value;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleSectionChange = (event, index) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.sections[index].data.value = event.target.value;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
-  handleSectionTypeChange = (event, index) =>{
+  handleSectionTypeChange = (event, index) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.sections[index].type = event.target.value;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleAddSection = () => {
@@ -188,40 +219,40 @@ class Modules extends React.Component{
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.sections.push(addedSection);
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleRemoveSection = (removeIndex) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
-    let updatedSections = updatedModuleData.sections.filter((section,index)=>{
+    else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    let updatedSections = updatedModuleData.sections.filter((section, index) => {
       return index !== removeIndex;
     });
     updatedModuleData.sections = updatedSections;
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
-      else this.setState({ newModuleData: updatedModuleData });
+    else this.setState({ newModuleData: updatedModuleData });
   }
 
   renderSections = () => {
     let renderModule;
     if (this.state.selectedModuleId !== null)
       renderModule = this.state.selectedModuleData;
-      else renderModule = this.state.newModuleData;
-    return(
-      renderModule.sections.map((section,index) =>{
+    else renderModule = this.state.newModuleData;
+    return (
+      renderModule.sections.map((section, index) => {
         return (
-          <div className="row" key = {index}>
+          <div className="row" key={index}>
             <div className="input-field col s2 m2 l2">
               <p>Section type</p>
-              <select className = "browser-default" value = {section.type} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                  onChange = {(e)=>this.handleSectionTypeChange(e, index)}>
+              <select className="browser-default" value={section.type} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                onChange={(e) => this.handleSectionTypeChange(e, index)}>
                 <option value="">Choose section type</option>
                 <option value="TEXT">TEXT</option>
                 <option value="IMAGE">IMAGE</option>
@@ -229,13 +260,13 @@ class Modules extends React.Component{
               </select>
               {/* section remove */}
               <button className="btn waves-effect waves-light center" disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                onClick = {()=>this.handleRemoveSection(index)}>
+                onClick={() => this.handleRemoveSection(index)}>
                 <i className="material-icons">remove</i>
               </button>
             </div>
             {this.renderSection(section, index)}
           </div>
-          )
+        )
       })
     )
   }
@@ -243,31 +274,31 @@ class Modules extends React.Component{
     switch (section.type) {
       case "TEXT":
         return (
-          <div className = "col s10 m10 l10">
+          <div className="col s10 m10 l10">
             <div className="row">
               <div className="input-field col s12 m12 l12">
-              <textarea id="section-text" type="text" className = "materialize-textarea validate"
-                value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                onChange={(e)=>this.handleSectionChange(e, index)} />
+                <textarea id="section-text" type="text" className="materialize-textarea validate"
+                  value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                  onChange={(e) => this.handleSectionChange(e, index)} />
               </div>
             </div>
           </div>
         );
-       
+
       case "VIDEO":
         return (
-          <div className = "col s10 m10 l10">
+          <div className="col s10 m10 l10">
             <div className="row">
               <div className="input-field col s12 m12 l12">
-                <textarea id="section-videoURL" type="text" className = "materialize-textarea validate"
+                <textarea id="section-videoURL" type="text" className="materialize-textarea validate"
                   value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                  onChange={(e)=>this.handleSectionChange(e, index)}/>
-              </div>            
+                  onChange={(e) => this.handleSectionChange(e, index)} />
+              </div>
             </div>
-            <div className = "row">
-              <div className = "col s12 m12 l12 ">
+            <div className="row">
+              <div className="col s12 m12 l12 ">
                 <div className="video-container">
-                  <iframe src={section.data.value} name = {"iframe_" + index}></iframe>
+                  <iframe src={section.data.value} name={"iframe_" + index}></iframe>
                 </div>
               </div>
             </div>
@@ -276,40 +307,40 @@ class Modules extends React.Component{
 
       case "IMAGE":
         return (
-          <div className = "col s10 m10 l10">
+          <div className="col s10 m10 l10">
             <div className="row">
               <div className="input-field col s12 m12 l12">
-                <textarea id="section-imageURL" type="text" className = "materialize-textarea validate"
+                <textarea id="section-imageURL" type="text" className="materialize-textarea validate"
                   value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                  onChange={(e)=>this.handleSectionChange(e, index)}/>
-              </div> 
+                  onChange={(e) => this.handleSectionChange(e, index)} />
+              </div>
             </div>
-            <div className = "row">
-              <div className = "col s12 m12 l12 ">
-                <img className ="responsive-img" src = {section.data.value} alt = {"image_" + index}></img>
-               </div> 
+            <div className="row">
+              <div className="col s12 m12 l12 ">
+                <img className="responsive-img" src={section.data.value} alt={"image_" + index}></img>
+              </div>
             </div>
-          </div>
+          </div >
         );
       default:
-        return(
+        return (
           <div>
           </div>
         );
-      
+
     }
   }
 
-  render(){
+  render() {
     if (!this.state.apiResponse) return (<LoadingComponent />);
     return (
-      <div className = "ManageModules">
+      <div className="ManageModules">
         {/* back button */}
-        <div className = "row">
+        <div className="row">
           <Link className="btn waves-effect waves-light left"
-              to={{
-                pathname: "/content/programs/"
-              }}>
+            to={{
+              pathname: "/content/programs/"
+            }}>
             <i className="material-icons center">arrow_back</i>
           </Link>
         </div>
@@ -322,21 +353,21 @@ class Modules extends React.Component{
               </h4>
             </div>
             <div className="col s1 m1 l1 right-align">
-              <i className="material-icons" onClick={() => (this.state.selectedModuleId !== null ? (this.setState({ editFlag: !this.state.editFlag})) : null )}>edit</i>
+              <i className="material-icons" onClick={() => (this.state.selectedModuleId !== null ? (this.setState({ editFlag: !this.state.editFlag })) : null)}>edit</i>
             </div>
           </div>
         </div>
 
-        <div className ="content-area">
-          <div className = "row">
+        <div className="content-area">
+          <div className="row">
             <div className="col s4 m4 l4">
-                <ContentListContainer
-                  title={'Modules'}
-                  data={this.state.modulesData}
-                  onClickAction={this.onClickAction}
-                  onCreateAction={this.onCreateAction}
-                  selectedTaskId={this.state.selectedModuleId}
-                />
+              <ContentListContainer
+                title={'Modules'}
+                data={this.state.modulesData}
+                onClickAction={this.onClickAction}
+                onCreateAction={this.onCreateAction}
+                selectedTaskId={this.state.selectedModuleId}
+              />
             </div>
 
             {
@@ -345,11 +376,11 @@ class Modules extends React.Component{
                 <div className="card">
                   <div className="card-content">
                     {/* module ID */}
-                    <div className="row">                    
+                    <div className="row">
                       <p className="col s2 m2 l2 left-align"> Module ID </p>
                       <div className="input-field col s10">
-                        <input id="module-id" type="text" 
-                          value= {this.state.selectedModuleId !== null?this.state.selectedModuleData.id:this.state.newModuleData.id}
+                        <input id="module-id" type="text"
+                          value={this.state.selectedModuleId !== null ? this.state.selectedModuleData.id : this.state.newModuleData.id}
                           disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleIdChange} />
                       </div>
@@ -358,88 +389,91 @@ class Modules extends React.Component{
                     <div className="row">
                       <p className="col s2 m2 l2 left-align"> Module Title </p>
                       <div className="input-field col s10">
-                        <input id="module-title" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleId !== null?this.state.selectedModuleData.title:this.state.newModuleData.title}
+                        <input id="module-title" type="text" className="materialize-textarea validate"
+                          value={this.state.selectedModuleId !== null ? this.state.selectedModuleData.title : this.state.newModuleData.title}
                           disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                          onChange={this.handleTitleChange}/>
+                          onChange={this.handleTitleChange} />
                       </div>
                     </div>
                     {/* module description */}
                     <div className="row">
                       <p className="col s2 m2 l2 left-align"> Module short description </p>
                       <div className="input-field col s10">
-                        <textarea id="module-desc" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleId !== null?this.state.selectedModuleData.shortDescription:this.state.newModuleData.shortDescription} 
+                        <textarea id="module-desc" type="text" className="materialize-textarea validate"
+                          value={this.state.selectedModuleId !== null ? this.state.selectedModuleData.shortDescription : this.state.newModuleData.shortDescription}
                           disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                          onChange={this.handleDescriptionChange}/>
+                          onChange={this.handleDescriptionChange} />
                       </div>
                     </div>
                     {/* module sections */}
                     {this.renderSections()}
                     {/* sections add*/}
-                    <div className = "row">
+                    <div className="row">
                       <button className="btn waves-effect waves-light left" disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                        onClick = {this.handleAddSection}>
+                        onClick={this.handleAddSection}>
                         <i className="material-icons">add</i>
                       </button>
 
-                    {/* Text editor */}
-                    <div className="row">
-                      <button data-target="modal1" className="btn modal-trigger">Add Section</button>
-                      <div id="modal1" className="modal">
-                        <div className="modal-content">
-                          <h5>Text Editor</h5>
-                          <ReactQuill
-                            value={this.state.text}
-                              onChange={this.handleChange}
+                      {/* Text editor */}
+                      <div className="row">
+                        <button data-target="modal1" className="btn modal-trigger">Add Section</button>
+                        <div id="modal1" className="modal">
+                          <div className="modal-content">
+                            <h5>Text Editor</h5>
+                            <ReactQuill
+                              value={this.state.text}
+                              onChange={this.handleTextEditorChange}
                               modules={this.modules}
                               formats={this.formats}
                               theme="snow"
                               placeholder="Start here ..."
-                          />
-                        </div>
-                        <div className="modal-footer">
-                          <button className="btn-flat waves-effect waves-light">
-                            Save
-                        </button>
-                          <button className="btn waves-effect waves-light">
-                            Discard
-                        </button>
+                            />
+                          </div>
+                          <div className="modal-footer">
+                            <button className="btn-flat waves-effect waves-light" onClick={this.saveHTML}>
+                              Save as HTML
+                            </button>
+                            <button className="btn-flat waves-effect waves-light" onClick={this.savePlainText}>
+                              Save as Plain Text
+                            </button>
+                            <button className="btn waves-effect waves-light">
+                              Close
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* submit button */}
-                    <button className="btn waves-effect waves-light" type="submit" name="action" 
-                      disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
-                      onClick={this.state.selectedModuleId !== null?this.editModule:this.createModule}>{this.state.selectedModuleId !== null?"Submit":"Create"}
-                      <i className="material-icons right">send</i>
-                    </button>
-                    <div className="row">
-                      <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
+                      {/* submit button */}
+                      <button className="btn waves-effect waves-light" type="submit" name="action"
+                        disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                        onClick={this.state.selectedModuleId !== null ? this.editModule : this.createModule}>{this.state.selectedModuleId !== null ? "Submit" : "Create"}
+                        <i className="material-icons right">send</i>
+                      </button>
+                      <div className="row">
+                        <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
             }
           </div>
         </div>
         {/* Link to activities and tasks */}
-        {this.state.selectedModuleId === null? "":   
+        {this.state.selectedModuleId === null ? "" :
           <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
             to={{
               pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/activities",
-              state: {selectedModuleData: this.state.selectedModuleData}
+              state: { selectedModuleData: this.state.selectedModuleData }
             }}>
             Activities
           </Link>
         }
-        {this.state.selectedModuleId === null? "":
+        {this.state.selectedModuleId === null ? "" :
           <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
             to={{
               pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/tasks",
-              state: {selectedModuleData: this.state.selectedModuleData}
+              state: { selectedModuleData: this.state.selectedModuleData }
             }}>
             Tasks
           </Link>
