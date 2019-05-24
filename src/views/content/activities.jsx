@@ -82,6 +82,7 @@ class Activities extends Component {
       ['blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
       [{ 'color': [] }],
+      ['link', 'image', 'video'],
       ['clean']
     ],
   }
@@ -89,7 +90,8 @@ class Activities extends Component {
   formats = [
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent', 'color'
+    'list', 'bullet', 'indent', 'color',
+    'link', 'image', 'video'
   ]
 
   stateHandler = (state) => {

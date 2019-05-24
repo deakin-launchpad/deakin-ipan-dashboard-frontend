@@ -91,6 +91,7 @@ class Modules extends React.Component {
       ['blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
       [{ 'color': [] }],
+      ['link', 'image', 'video'],
       ['clean']
     ],
   }
@@ -98,7 +99,8 @@ class Modules extends React.Component {
   formats = [
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent', 'color'
+    'list', 'bullet', 'indent', 'color',
+    'link', 'image', 'video'
   ]
 
   stateHandler = (state) => {
