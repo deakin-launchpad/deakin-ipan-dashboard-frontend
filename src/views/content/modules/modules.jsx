@@ -61,7 +61,7 @@ class Modules extends React.Component{
     //work around the "_id" issue in module sections by delete the "_id" field when send data to server
     let updatedModuleData = this.state.selectedModuleData;
     updatedModuleData.sections.map(section=>{
-      delete section._id;
+      return delete section._id;
     });
     API.updateModule(updatedModuleData, this.stateHandler, () => {
       let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
@@ -239,7 +239,7 @@ class Modules extends React.Component{
             <div className = "row">
               <div className = "col s12 m12 l12 ">
                 <div className="video-container">
-                  <iframe src={section.data.value}></iframe>
+                  <iframe src={section.data.value} name = {"iframe_" + index}></iframe>
                 </div>
               </div>
             </div>
@@ -258,7 +258,7 @@ class Modules extends React.Component{
             </div>
             <div className = "row">
               <div className = "col s12 m12 l12 ">
-                <img className ="responsive-img" src = {section.data.value}></img>
+                <img className ="responsive-img" src = {section.data.value} alt = {"image_" + index}></img>
                </div> 
             </div>
           </div>
