@@ -388,7 +388,7 @@ class Modules extends React.Component {
                 data={this.state.modulesData}
                 onClickAction={this.onClickAction}
                 onCreateAction={this.onCreateAction}
-                selectedTaskId={this.state.selectedModuleId}
+                selectedId={this.state.selectedModuleId}
               />
             </div>
 

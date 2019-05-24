@@ -120,7 +120,7 @@ class Programs extends Component {
                 data={this.state.programs}
                 onClickAction={this.onClickAction}
                 onCreateAction={this.onCreateAction}
-                selectedTaskId={this.state.selectedProgramId}
+                selectedId={this.state.selectedProgramId}
               />
             </div>
 

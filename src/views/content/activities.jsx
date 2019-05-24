@@ -215,7 +215,7 @@ class Activities extends Component {
                 data={this.state.activities}
                 onClickAction={this.onClickAction}
                 onCreateAction={this.onCreateAction}
-                selectedTaskId={this.state.selectedActivityId}
+                selectedId={this.state.selectedActivityId}
               />
             </div>
 

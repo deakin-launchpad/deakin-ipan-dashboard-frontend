@@ -237,7 +237,7 @@ class ManageTask extends Component {
                 title={'Tasks'}
                 data={this.state.tasksData}
                 onClickAction={this.onClickAction}
-                selectedTaskId={this.state.selectedTaskId}
+                selectedId={this.state.selectedTaskId}
               />
             </div>
 
