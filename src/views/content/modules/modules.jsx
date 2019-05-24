@@ -42,8 +42,6 @@ class Modules extends React.Component {
     })
   }
 
-  // TODO: Check array[0] value whether its HTML or text
-  // If text then replace that value
   saveHTML = () => {
     let isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i)
 
