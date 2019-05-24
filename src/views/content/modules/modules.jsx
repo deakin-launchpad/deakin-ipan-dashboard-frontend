@@ -13,6 +13,7 @@ class Modules extends React.Component{
       modulesData: [],
       selectedModuleId: null,
       selectedModuleData: null,
+      newModuleData: {id:'', title:'', shortDescription:'', sections: []},// to solve React warning of changing between controlled and uncontrolled input
       editFlag: false,
     })
   }
@@ -24,7 +25,7 @@ class Modules extends React.Component{
 
   stateHandler = (state) => {
     console.log("stateHandler");
-    console.log(state);
+    console.log(typeof this.state.newModuleData.id);
     this.setState(state);
     if (this.props.location.state)
       this.validateModules(this.props.location.state.selectedProgram);
@@ -39,6 +40,10 @@ class Modules extends React.Component{
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
+    console.log("selectedModuleId " + selectedModuleId);
+    console.log("selectedModuleData ");
+    console.log(selectedModuleData);
+    console.log(this.state);
     this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData, editFlag: false },
       this.resizeTextArea);
   }
@@ -73,26 +78,67 @@ class Modules extends React.Component{
     });
   }
 
+  createModule = () => {
+    let newModuleData = {
+      id: this.state.newModuleData.id,
+      title: this.state.newModuleData.title,
+      shortDescription: this.state.newModuleData.shortDescription,
+      sections: this.state.newModuleData.sections,
+      tasks: [],//TODO
+      activities: [],//TODO
+      goals: [],//TODO
+      refreshers: [],//TODO
+      pill: [],//TODO
+      notifications: [],//TODO
+      prerequisities: {}//TODO
+    }
+    let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
+    updatedModulesData.push(newModuleData);
+    console.log("crete module");
+    console.log(updatedModulesData);
+    this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []}}, this.resizeTextArea);
+  }
+
   handleIdChange = (event) => {
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.id = event.target.value;
-    this.setState({ selectedModuleData: updatedModuleData });
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });// update selected module
+      else this.setState({ newModuleData: updatedModuleData }); //or update a new module
   }
 
   handleTitleChange = (event) => {
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    console.log("handleTitleChange");
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.title = event.target.value;
-    this.setState({ selectedModuleData: updatedModuleData });
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleDescriptionChange = (event) => {
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    console.log("handleDescriptionChange");
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.shortDescription = event.target.value;
-    this.setState({ selectedModuleData: updatedModuleData });
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleSectionChange = (event, sectionId) => {
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     let updatedSectionIndex = updatedModuleData.sections.findIndex((p) => p._id === sectionId);
     updatedModuleData.sections[updatedSectionIndex].data.value = event.target.value;
     this.setState({ selectedModuleData: updatedModuleData });
@@ -213,7 +259,7 @@ class Modules extends React.Component{
               </h4>
             </div>
             <div className="col s1 m1 l1 right-align">
-              <i className="material-icons" onClick={() => (this.state.selectedModuleId ? (this.setState({ editFlag: !this.state.editFlag})) : null )}>edit</i>
+              <i className="material-icons" onClick={() => (this.state.selectedModuleId !== null ? (this.setState({ editFlag: !this.state.editFlag})) : null )}>edit</i>
             </div>
           </div>
         </div>
@@ -239,8 +285,9 @@ class Modules extends React.Component{
                     <div className="row">                    
                       <p className="col s2 m2 l2 left-align"> Module ID </p>
                       <div className="input-field col s10">
-                        <input id="module-id" type="number" 
-                          value= {this.state.selectedModuleId?this.state.selectedModuleId:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
+                        <input id="module-id" type="text" 
+                          value= {this.state.selectedModuleId !== null?this.state.selectedModuleData.id:this.state.newModuleData.id}
+                          disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleIdChange} />
                       </div>
                     </div>
@@ -249,7 +296,8 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module Title </p>
                       <div className="input-field col s10">
                         <input id="module-title" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleId?this.state.selectedModuleData.title:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
+                          value={this.state.selectedModuleId !== null?this.state.selectedModuleData.title:this.state.newModuleData.title}
+                          disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleTitleChange}/>
                       </div>
                     </div>
@@ -258,13 +306,14 @@ class Modules extends React.Component{
                       <p className="col s2 m2 l2 left-align"> Module short description </p>
                       <div className="input-field col s10">
                         <textarea id="module-desc" type="text" className = "materialize-textarea validate"
-                          value={this.state.selectedModuleId?this.state.selectedModuleData.shortDescription:""} disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
+                          value={this.state.selectedModuleId !== null?this.state.selectedModuleData.shortDescription:this.state.newModuleData.shortDescription} 
+                          disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
                           onChange={this.handleDescriptionChange}/>
                       </div>
                     </div>
                     {/* module sections */}
                     {
-                      !this.state.selectedModuleId?"":(
+                      this.state.selectedModuleId === null?"":(
                         this.state.selectedModuleData.sections.length > 0 ? (
                           this.state.selectedModuleData.sections.map(section =>{
                             return (
@@ -293,15 +342,16 @@ class Modules extends React.Component{
                     }
                     {/* sections add*/}
                     <div className = "row">
-                      <button className="btn waves-effect waves-light left" disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
+                      <button className="btn waves-effect waves-light left" disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
                         onClick = {this.handleAddSection}>
                         <i className="material-icons">add</i>
                       </button>
                     </div>
 
                     {/* submit button */}
-                    <button className="btn waves-effect waves-light" type="submit" name="action" disabled={this.state.selectedModuleId && !this.state.editFlag ? "disabled" : false}
-                        onClick={this.editModule}>{this.state.selectedModuleId?"Submit":"Create"}
+                    <button className="btn waves-effect waves-light" type="submit" name="action" 
+                      disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                      onClick={this.state.selectedModuleId !== null?this.editModule:this.createModule}>{this.state.selectedModuleId !== null?"Submit":"Create"}
                       <i className="material-icons right">send</i>
                     </button>
                   </div>
@@ -311,7 +361,7 @@ class Modules extends React.Component{
           </div>
         </div>
         {/* Link to activities and tasks */}
-        {!this.state.selectedModuleId? "":   
+        {this.state.selectedModuleId === null? "":   
           <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
             to={{
               pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/activities",
@@ -320,7 +370,7 @@ class Modules extends React.Component{
             Activities
           </Link>
         }
-        {!this.state.selectedModuleId? "":
+        {this.state.selectedModuleId === null? "":
           <Link className="btn waves-effect waves-light right" id="activities-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
             to={{
               pathname: "/content/programs/" + this.props.location.state.selectedProgram.id + "/modules/" + this.state.selectedModuleId + "/tasks",
