@@ -66,6 +66,15 @@ class Modules extends React.Component {
     }
   }
 
+  exportToHTML = () => {
+    const element = document.createElement("a");
+    const file = new Blob([TEXT_EDITOR_VALUE], { type: 'text/html' });
+    element.href = URL.createObjectURL(file);
+    element.download = "modules_section.html";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  }
+
   componentDidMount() {
     M.AutoInit();
     this.getModules();
@@ -443,6 +452,9 @@ class Modules extends React.Component {
                             />
                           </div>
                           <div className="modal-footer">
+                            <button className="btn-flat waves-effect waves-light" onClick={this.exportToHTML}>
+                              Export to HTML
+                            </button>
                             <button className="btn-flat waves-effect waves-light" onClick={this.saveHTML}>
                               Save as HTML
                             </button>
