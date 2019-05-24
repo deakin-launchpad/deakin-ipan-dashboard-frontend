@@ -320,7 +320,7 @@ class Modules extends React.Component {
             <div className="row">
               <div className="col s12 m12 l12 ">
                 <div className="video-container">
-                  <iframe src={section.data.value} name={"iframe_" + index}></iframe>
+                  <iframe src={section.data.value} name={"iframe_" + index} title={Math.random()}></iframe>
                 </div>
               </div>
             </div>
