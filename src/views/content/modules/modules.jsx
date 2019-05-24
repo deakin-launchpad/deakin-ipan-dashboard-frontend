@@ -134,24 +134,30 @@ class Modules extends React.Component{
       else this.setState({ newModuleData: updatedModuleData });
   }
 
-  handleSectionChange = (event, sectionId) => {
+  handleSectionChange = (event, index) => {
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
       else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
-    let updatedSectionIndex = updatedModuleData.sections.findIndex((p) => p._id === sectionId);
-    updatedModuleData.sections[updatedSectionIndex].data.value = event.target.value;
-    this.setState({ selectedModuleData: updatedModuleData });
+    updatedModuleData.sections[index].data.value = event.target.value;
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
 
-  handleSectionTypeChange = (event, sectionId) =>{
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-    let updatedSectionIndex = updatedModuleData.sections.findIndex((p) => p._id === sectionId);
-    updatedModuleData.sections[updatedSectionIndex].type = event.target.value;
-    this.setState({ selectedModuleData: updatedModuleData });
+  handleSectionTypeChange = (event, index) =>{
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    updatedModuleData.sections[index].type = event.target.value;
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
 
   handleAddSection = () => {
+    console.log("handleAddSection");
     let addedSection = {
       type: "TEXT",
       data: {
@@ -159,24 +165,62 @@ class Modules extends React.Component{
         misc: []
       }
     }
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.sections.push(addedSection);
-    this.setState({ selectedModuleData: updatedModuleData });
+    console.log(updatedModuleData);
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
 
-  handleRemoveSection = (removeSection) => {
-    console.log("handleRemoveSection");
-    console.log(removeSection);
-    let updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
-    let updatedSections = updatedModuleData.sections.filter(section=>{
-      return (JSON.stringify(section) !== JSON.stringify(removeSection));
+  handleRemoveSection = (removeIndex) => {
+    let updatedModuleData;
+    if (this.state.selectedModuleId !== null)
+      updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
+      else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
+    let updatedSections = updatedModuleData.sections.filter((section,index)=>{
+      return index !== removeIndex;
     });
-    console.log(updatedSections);
     updatedModuleData.sections = updatedSections;
-    console.log(updatedModuleData);
-    this.setState({ selectedModuleData: updatedModuleData });
+    if (this.state.selectedModuleId !== null)
+      this.setState({ selectedModuleData: updatedModuleData });
+      else this.setState({ newModuleData: updatedModuleData });
   }
-  renderSection = (section) => {
+
+  renderSections = () => {
+    let renderModule;
+    if (this.state.selectedModuleId !== null)
+      renderModule = this.state.selectedModuleData;
+      else renderModule = this.state.newModuleData;
+    return(
+      renderModule.sections.map((section,index) =>{
+        return (
+          <div className="row" key = {index}>
+            <div className="input-field col s2 m2 l2">
+              <p>Section type</p>
+              <select className = "browser-default" value = {section.type} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                  onChange = {(e)=>this.handleSectionTypeChange(e, index)}>
+                <option value="">Choose section type</option>
+                <option value="TEXT">TEXT</option>
+                <option value="IMAGE">IMAGE</option>
+                <option value="VIDEO">VIDEO</option>
+              </select>
+              {/* section remove */}
+              <button className="btn waves-effect waves-light center" disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                onClick = {()=>this.handleRemoveSection(index)}>
+                <i className="material-icons">remove</i>
+              </button>
+            </div>
+            {this.renderSection(section, index)}
+          </div>
+          )
+      })
+    )
+  }
+  renderSection = (section, index) => {
     switch (section.type) {
       case "TEXT":
         return (
@@ -184,8 +228,8 @@ class Modules extends React.Component{
             <div className="row">
               <div className="input-field col s12 m12 l12">
               <textarea id="section-text" type="text" className = "materialize-textarea validate"
-                value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
-                onChange={(e)=>this.handleSectionChange(e, section._id)} />
+                value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                onChange={(e)=>this.handleSectionChange(e, index)} />
               </div>
             </div>
           </div>
@@ -197,8 +241,8 @@ class Modules extends React.Component{
             <div className="row">
               <div className="input-field col s12 m12 l12">
                 <textarea id="section-videoURL" type="text" className = "materialize-textarea validate"
-                  value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
-                  onChange={(e)=>this.handleSectionChange(e, section._id)}/>
+                  value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                  onChange={(e)=>this.handleSectionChange(e, index)}/>
               </div>            
             </div>
             <div className = "row">
@@ -217,8 +261,8 @@ class Modules extends React.Component{
             <div className="row">
               <div className="input-field col s12 m12 l12">
                 <textarea id="section-imageURL" type="text" className = "materialize-textarea validate"
-                  value={section.data.value} disabled={!this.state.editFlag ? "disabled" : false}
-                  onChange={(e)=>this.handleSectionChange(e, section._id)}/>
+                  value={section.data.value} disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
+                  onChange={(e)=>this.handleSectionChange(e, index)}/>
               </div> 
             </div>
             <div className = "row">
@@ -312,34 +356,7 @@ class Modules extends React.Component{
                       </div>
                     </div>
                     {/* module sections */}
-                    {
-                      this.state.selectedModuleId === null?"":(
-                        this.state.selectedModuleData.sections.length > 0 ? (
-                          this.state.selectedModuleData.sections.map(section =>{
-                            return (
-                              <div className="row" key = {section._id}>
-                                <div className="input-field col s2 m2 l2">
-                                  <p>Section type</p>
-                                  <select className = "browser-default" value = {section.type} disabled={!this.state.editFlag ? "disabled" : false}
-                                      onChange = {(e)=>this.handleSectionTypeChange(e, section._id)}>
-                                    <option value="">Choose section type</option>
-                                    <option value="TEXT">TEXT</option>
-                                    <option value="IMAGE">IMAGE</option>
-                                    <option value="VIDEO">VIDEO</option>
-                                  </select>
-                                  {/* section remove */}
-                                  <button className="btn waves-effect waves-light center" disabled={!this.state.editFlag ? "disabled" : false}
-                                    onClick = {()=>this.handleRemoveSection(section)}>
-                                    <i className="material-icons">remove</i>
-                                  </button>
-                                </div>
-                                {this.renderSection(section)}
-                              </div>
-                              )
-                          })
-                        ) : <div></div>
-                      )
-                    }
+                    {this.renderSections()}
                     {/* sections add*/}
                     <div className = "row">
                       <button className="btn waves-effect waves-light left" disabled={this.state.selectedModuleId !== null && !this.state.editFlag ? "disabled" : false}
