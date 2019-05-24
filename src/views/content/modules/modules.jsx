@@ -35,7 +35,7 @@ class Modules extends React.Component {
       wordwrap: 130
     });
     let sectionsArr = this.state.newModuleData.sections
-    let obj = { data: { misc: [], value: convertHTMLToText } }
+    let obj = { data: { misc: [], value: convertHTMLToText }, type: "TEXT" }
     sectionsArr.splice(1, 0, obj)
     this.setState({
       newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
@@ -45,12 +45,27 @@ class Modules extends React.Component {
   // TODO: Check array[0] value whether its HTML or text
   // If text then replace that value
   saveHTML = () => {
-    let sectionsArr = this.state.newModuleData.sections
-    let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE } }
-    sectionsArr.splice(1, 0, obj)
-    this.setState({
-      newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
-    })
+    let isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i)
+
+    // Check if section array[0] got value as HTML
+    // If true then replace the 0 element
+    // Otherwise Add obj at position 0
+    let sectionsArr = this.state.newModuleData.sections.slice()
+    let checkArrayIsHTML = (sectionsArr.length > 0 ? isHTML(sectionsArr[0].data.value) : false)
+
+    if (!checkArrayIsHTML) {
+      let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE }, type: "TEXT" }
+      sectionsArr.push(obj)
+      this.setState({
+        newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+      })
+    } else {
+      let obj = { data: { misc: [], value: TEXT_EDITOR_VALUE } }
+      sectionsArr[0] = obj
+      this.setState({
+        newModuleData: { id: this.state.newModuleData.id, title: this.state.newModuleData.title, shortDescription: this.state.newModuleData.shortDescription, sections: sectionsArr }
+      })
+    }
   }
 
   componentDidMount() {
