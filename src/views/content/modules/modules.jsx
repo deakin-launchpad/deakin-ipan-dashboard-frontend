@@ -24,8 +24,6 @@ class Modules extends React.Component{
   }
 
   stateHandler = (state) => {
-    console.log("stateHandler");
-    console.log(typeof this.state.newModuleData.id);
     this.setState(state);
     if (this.props.location.state)
       this.validateModules(this.props.location.state.selectedProgram);
@@ -40,10 +38,6 @@ class Modules extends React.Component{
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
-    console.log("selectedModuleId " + selectedModuleId);
-    console.log("selectedModuleData ");
-    console.log(selectedModuleData);
-    console.log(this.state);
     this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData, editFlag: false },
       this.resizeTextArea);
   }
@@ -68,7 +62,6 @@ class Modules extends React.Component{
     updatedModuleData.sections.map(section=>{
       delete section._id;
     });
-    this.setState({ apiResponse: false });
     API.updateModule(updatedModuleData, this.stateHandler, () => {
       let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
@@ -88,15 +81,17 @@ class Modules extends React.Component{
       activities: [],//TODO
       goals: [],//TODO
       refreshers: [],//TODO
-      pill: [],//TODO
+      pills: [],//TODO
       notifications: [],//TODO
       prerequisities: {}//TODO
     }
-    let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
-    updatedModulesData.push(newModuleData);
-    console.log("crete module");
-    console.log(updatedModulesData);
-    this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []}}, this.resizeTextArea);
+    API.createModule(newModuleData, this.stateHandler, () => {
+      let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
+      updatedModulesData.push(newModuleData);
+      this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []}}
+        , this.resizeTextArea);
+    })
+    
   }
 
   handleIdChange = (event) => {
@@ -111,7 +106,6 @@ class Modules extends React.Component{
   }
 
   handleTitleChange = (event) => {
-    console.log("handleTitleChange");
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
@@ -123,7 +117,6 @@ class Modules extends React.Component{
   }
 
   handleDescriptionChange = (event) => {
-    console.log("handleDescriptionChange");
     let updatedModuleData;
     if (this.state.selectedModuleId !== null)
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
@@ -157,7 +150,6 @@ class Modules extends React.Component{
   }
 
   handleAddSection = () => {
-    console.log("handleAddSection");
     let addedSection = {
       type: "TEXT",
       data: {
@@ -170,7 +162,6 @@ class Modules extends React.Component{
       updatedModuleData = JSON.parse(JSON.stringify(this.state.selectedModuleData));
       else updatedModuleData = JSON.parse(JSON.stringify(this.state.newModuleData));
     updatedModuleData.sections.push(addedSection);
-    console.log(updatedModuleData);
     if (this.state.selectedModuleId !== null)
       this.setState({ selectedModuleData: updatedModuleData });
       else this.setState({ newModuleData: updatedModuleData });
