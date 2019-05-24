@@ -15,6 +15,7 @@ class Modules extends React.Component{
       selectedModuleData: null,
       newModuleData: {id:'', title:'', shortDescription:'', sections: []},// to solve React warning of changing between controlled and uncontrolled input
       editFlag: false,
+      message: { text: '', type: '' }
     })
   }
 
@@ -38,12 +39,12 @@ class Modules extends React.Component{
   }
 
   onClickAction = (selectedModuleId, selectedModuleData) => {
-    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData, editFlag: false },
+    this.setState({ selectedModuleId: selectedModuleId, selectedModuleData: selectedModuleData, editFlag: false, message: { text: '', type: '' } },
       this.resizeTextArea);
   }
 
   onCreateAction = () => {
-    this.setState({selectedModuleId: null, editFlag: false});
+    this.setState({selectedModuleId: null, editFlag: false, message: { text: '', type: '' }});
   }
 
   getModules = () => {
@@ -66,9 +67,9 @@ class Modules extends React.Component{
       let updatedModuleIndex = this.state.modulesData.findIndex((p) => p.id === this.state.selectedModuleId);
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
       updatedModulesData[updatedModuleIndex] = this.state.selectedModuleData;
-      this.setState({ modulesData: updatedModulesData}, this.resizeTextArea);
-      this.setState({ editFlag: !this.state.editFlag });
-    });
+      this.setState({ modulesData: updatedModulesData, editFlag: false, 
+        message: { text: "Module updated!", type: "success" }}, this.resizeTextArea);
+    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" }}));
   }
 
   createModule = () => {
@@ -88,10 +89,9 @@ class Modules extends React.Component{
     API.createModule(newModuleData, this.stateHandler, () => {
       let updatedModulesData = JSON.parse(JSON.stringify(this.state.modulesData));
       updatedModulesData.push(newModuleData);
-      this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []}}
-        , this.resizeTextArea);
-    })
-    
+      this.setState({ modulesData: updatedModulesData, newModuleData: {id:'', title:'', shortDescription:'', sections: []},
+        message: { text: "Module created!", type: "success" }}, this.resizeTextArea);
+    }, (error) => this.setState({ message: { text: error.response.data.message, type: "" }}));
   }
 
   handleIdChange = (event) => {
@@ -362,6 +362,9 @@ class Modules extends React.Component{
                       onClick={this.state.selectedModuleId !== null?this.editModule:this.createModule}>{this.state.selectedModuleId !== null?"Submit":"Create"}
                       <i className="material-icons right">send</i>
                     </button>
+                    <div className="row">
+                      <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
+                    </div>
                   </div>
                 </div>
               </div>

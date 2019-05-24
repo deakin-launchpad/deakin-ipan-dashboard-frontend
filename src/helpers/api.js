@@ -39,24 +39,28 @@ class API {
       })
   }
 
-  updateModule(updatedModule, stateHandler, callback) {
+  updateModule(updatedModule, stateHandler, callback, errCallback) {
     axiosClient.put(CONSTANTS.ASSET_MANAGEMENT_MODULES, updatedModule)
     .then(() => {
       stateHandler({
         apiResponse: true
       });
       callback();
-    })
+    }).catch((error) => {
+      errCallback(error);
+    });
   }
   
-  createModule(newModule, stateHandler, callback) {
+  createModule(newModule, stateHandler, callback, errCallback) {
     axiosClient.post(CONSTANTS.ASSET_MANAGEMENT_MODULES, newModule)
     .then(() => {
       stateHandler({
         apiResponse: true
       });
       callback();
-    })
+    }).catch((error) => {
+      errCallback(error);
+    });
   }
 
   getActivities(stateHandler) {
