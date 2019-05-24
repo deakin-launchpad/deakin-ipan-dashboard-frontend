@@ -97,7 +97,7 @@ class Programs extends Component {
 
   render() {
     if (!this.state.apiResponse) return (<LoadingComponent />)
-    return(
+    return (
       <div className="ManagePrograms">
         <div className="title left-align">
           <div className="row valign-wrapper">
@@ -107,74 +107,82 @@ class Programs extends Component {
               </h4>
             </div>
             <div className="col s1 m1 l1 right-align">
-              <i className="material-icons" onClick={() => (this.state.selectedProgramId ? (this.setState({ editFlag: !this.state.editFlag})) : null )}>edit</i>
+              <i className="material-icons" onClick={() => (this.state.selectedProgramId ? (this.setState({ editFlag: !this.state.editFlag })) : null)}>edit</i>
             </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col s4 m4 l4">
-            <ContentListContainer title={'Programs'} data={this.state.programs} onClickAction={this.onClickAction} onCreateAction={this.onCreateAction} selectedTaskId={this.state.selectedProgramId} />
-          </div>
-          
-          <div className="col s8 m8 l8">
-            <div className="card">
-              <div className="card-content">
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Program ID </p>
+        <div className="content-area">
+          <div className="row">
+            <div className="col s4 m4 l4">
+              <ContentListContainer
+                title={'Programs'}
+                data={this.state.programs}
+                onClickAction={this.onClickAction}
+                onCreateAction={this.onCreateAction}
+                selectedTaskId={this.state.selectedProgramId}
+              />
+            </div>
 
-                  <div className="input-field col s10">
-                    <input id="program-id" type="number" value={this.state.selectedProgram.id} disabled="disabled" />
+            <div className="col s8 m8 l8">
+              <div className="card">
+                <div className="card-content">
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Program ID </p>
+
+                    <div className="input-field col s10">
+                      <input id="program-id" type="number" value={this.state.selectedProgram.id} disabled="disabled" />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Program Title </p>
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Program Title </p>
 
-                  <div className="input-field col s10">
-                    <input id="program-title" type="text" value={this.state.selectedProgram.title} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
-                    onChange={this.handleTitleChange} />
+                    <div className="input-field col s10">
+                      <input id="program-title" type="text" value={this.state.selectedProgram.title} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
+                        onChange={this.handleTitleChange} />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Description </p>
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Description </p>
 
-                  <div className="col s10 m10 l10">
-                    <textarea id="program-description" type="text" className="materialize-textarea validate" value={this.state.selectedProgram.description} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
-                    onChange={this.handleDescriptionChange} />
+                    <div className="col s10 m10 l10">
+                      <textarea id="program-description" type="text" className="materialize-textarea validate" value={this.state.selectedProgram.description} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
+                        onChange={this.handleDescriptionChange} />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <p className="col s2 m2 l2 left-align"> Cover Photo Url </p>
+                  <div className="row">
+                    <p className="col s2 m2 l2 left-align"> Cover Photo Url </p>
 
-                  <div className="input-field col s10">
-                    <input id="program-cover-photo" type="text" value={this.state.selectedProgram.coverPhoto} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
-                    onChange={this.handleCoverPhotoChange} />
+                    <div className="input-field col s10">
+                      <input id="program-cover-photo" type="text" value={this.state.selectedProgram.coverPhoto} disabled={this.state.selectedProgramId !== null && !this.state.editFlag ? "disabled" : false}
+                        onChange={this.handleCoverPhotoChange} />
+                    </div>
                   </div>
-                </div>
 
-                <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedProgramId !== "number" || this.state.editFlag ? "" : "disabled"}
-                        onClick={this.createEditProgram}>{typeof this.state.selectedProgramId !== "number" ? "Create" : "Submit"}
-                  <i className="material-icons right">send</i>
-                </button>
-                
-                <div className="row">
-                  <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
+                  <button className="btn waves-effect waves-light" type="submit" name="action" disabled={typeof this.state.selectedProgramId !== "number" || this.state.editFlag ? "" : "disabled"}
+                    onClick={this.createEditProgram}>{typeof this.state.selectedProgramId !== "number" ? "Create" : "Submit"}
+                    <i className="material-icons right">send</i>
+                  </button>
+
+                  <div className="row">
+                    <span className={this.state.message.type === "success" ? "light-green-text text-accent-3" : "red-text text-accent-3"}>{this.state.message.text}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <Link className="btn waves-effect waves-light right" id="modules-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
-          to={{
-            pathname: "/content/programs/" + this.state.selectedProgramId + "/modules",
-            state: {selectedProgram: this.state.selectedProgram}
-          }}>
-          Modules
+          <Link className="btn waves-effect waves-light right" id="modules-link" disabled={this.state.selectedProgramId !== null ? false : "disabled"}
+            to={{
+              pathname: "/content/programs/" + this.state.selectedProgramId + "/modules",
+              state: { selectedProgram: this.state.selectedProgram }
+            }}>
+            Modules
         </Link>
+        </div>
       </div>
     )
   }

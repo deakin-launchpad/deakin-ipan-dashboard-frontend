@@ -126,13 +126,14 @@ class Activities extends Component {
 
         <div className="content-area">
           <div className="row ">
-            <div className="col s12 m4 l3 ">
+            <div className="col s4 m4 l4">
               <ContentListContainer
                 title={'Activities'}
                 data={this.state.activities}
                 onClickAction={this.onClickAction}
                 onCreateAction={this.onCreateAction}
-                selectedTaskId={this.state.selectedActivityId} />
+                selectedTaskId={this.state.selectedActivityId}
+              />
             </div>
 
 
@@ -154,7 +155,7 @@ class Activities extends Component {
 
                   <div className="row">
                     <p className="col s2 m2 l2 left-align"> Activity Title </p>
-                    <div className="input-field col s10   ">
+                    <div className="input-field col s10">
                       <input
                         id="activity-title"
                         type="text"
@@ -192,15 +193,6 @@ class Activities extends Component {
             </div>
           </div>
         </div>
-
-
-        <Link className="btn waves-effect waves-light right" id="tasks-link" disabled={this.state.selectedActivityId !== null ? false : "disabled"}
-          to={{
-            pathname: "/content/programs/modules/" + this.state.selectedActivityId + "/tasks",
-            state: { selectedActivity: this.state.selectedActivity }
-          }}>
-          Tasks
-        </Link>
 
       </div >
 
