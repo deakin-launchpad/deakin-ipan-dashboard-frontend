@@ -4,6 +4,8 @@ import { ContentListContainer } from '../../../components/contentListContainer.j
 import API from 'helpers/api.js';
 import M from "materialize-css";
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 class Modules extends React.Component{
   constructor(props){
@@ -15,14 +17,41 @@ class Modules extends React.Component{
       selectedModuleData: null,
       newModuleData: {id:'', title:'', shortDescription:'', sections: []},// to solve React warning of changing between controlled and uncontrolled input
       editFlag: false,
-      message: { text: '', type: '' }
+      message: { text: '', type: '' },
+      text: '',
+
     })
+  }
+
+  handleChange = (value) => {
+    console.log(value)
   }
 
   componentDidMount(){
     M.AutoInit();
     this.getModules();
   }
+
+  componentDidUpdate() {
+    M.Modal.init(document.querySelectorAll('.modal'))
+  }
+
+  modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'color': [] }], 
+      ['clean']
+    ],
+  }
+
+  formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent', 'color'
+  ]
 
   stateHandler = (state) => {
     this.setState(state);
@@ -354,6 +383,29 @@ class Modules extends React.Component{
                         onClick = {this.handleAddSection}>
                         <i className="material-icons">add</i>
                       </button>
+                    <div className="row">
+                      <button data-target="modal1" className="btn modal-trigger">Text Editor</button>
+                      <div id="modal1" className="modal">
+                        <div className="modal-content">
+                          <h5>Text Editor</h5>
+                          <ReactQuill
+                            value={this.state.text}
+                              onChange={this.handleChange}
+                              modules={this.modules}
+                              formats={this.formats}
+                              theme="snow"
+                              placeholder="Start here ..."
+                          />
+                        </div>
+                        <div className="modal-footer">
+                          <button className="btn-flat waves-effect waves-light">
+                            Save
+                        </button>
+                          <button className="btn waves-effect waves-light">
+                            Discard
+                        </button>
+                        </div>
+                      </div>
                     </div>
 
                     {/* submit button */}
@@ -367,6 +419,7 @@ class Modules extends React.Component{
                     </div>
                   </div>
                 </div>
+              </div>
               </div>
             }
           </div>
