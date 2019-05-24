@@ -35,7 +35,7 @@ class ManageTask extends Component {
   }
 
   getTaskData = () => {
-    API.getTaskData(this.stateHandler);
+    API.getTasksData(this.stateHandler);
   }
 
   onClickAction = (selectedTaskId, selectedTaskData) => {
@@ -120,7 +120,7 @@ class ManageTask extends Component {
                     className="browser-default"
                     defaultValue={data.question.text ? "TEXT" : "IMAGE"}
                     disabled={this.state.selectedTaskId !== null && !this.state.editFlag ? "disabled" : false}
-                    // onChange={(e) => this.handleChange("Q_TYPE", e.target.value, i)}
+                  // onChange={(e) => this.handleChange("Q_TYPE", e.target.value, i)}
                   >
                     {
                       QUESTION.map((item, key) => {
