@@ -49,6 +49,16 @@ class API {
     })
   }
   
+  createModule(newModule, stateHandler, callback) {
+    axiosClient.post(CONSTANTS.ASSET_MANAGEMENT_MODULES, newModule)
+    .then(() => {
+      stateHandler({
+        apiResponse: true
+      });
+      callback();
+    })
+  }
+
   getActivities(stateHandler) {
     axiosClient.get(CONSTANTS.ASSET_MANAGEMENT_ACTIVITIES)
       .then((response) => {
